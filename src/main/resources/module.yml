@@ -1,0 +1,12 @@
+name: Capture The Wool
+id: capture_the_wool
+version: ${revision}
+type: MINIGAME
+api-version: 3.3
+main: net.blueva.arcade.modules.capture_the_wool.CaptureTheWoolModule
+
+authors:
+  - Blueva
+  - Whiron
+
+description: "Capture enemy wools and bring them to your base."

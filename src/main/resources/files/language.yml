@@ -1,0 +1,238 @@
+file_version: 1
+display_name: "Capture The Wool"
+
+description:
+  - "<dark_gray><strikethrough>----------------------------------------------</strikethrough></dark_gray>"
+  - "<green>Game</green> <gray>-</gray> <yellow><bold>Capture The Wool</bold></yellow>"
+  - " "
+  - "<white>Description:</white>"
+  - "<gray>Capture enemy wools from their base and bring them back to yours.</gray>"
+  - "<gray>Work with your team to capture all the wools first!</gray>"
+  - " "
+  - "<dark_gray><strikethrough>----------------------------------------------</strikethrough></dark_gray>"
+
+vote_menu:
+  name: "<green>Capture The Wool</green>"
+  lore:
+    - "<gray>Capture enemy wools and bring them to your base.</gray>"
+    - "<gray>Loot, fight, and capture all wools to win!</gray>"
+    - ""
+    - "<white>{votes}</white> <gray>votes.</gray>"
+
+votes:
+  labels:
+    categories:
+      chests: "Chest loot"
+      hearts: "Hearts"
+      time: "Time"
+      weather: "Weather"
+    options:
+      chests:
+        basic: "Basic"
+        normal: "Normal"
+        overpowered: "Overpowered"
+      hearts:
+        "10": "10 hearts"
+        "20": "20 hearts"
+        "30": "30 hearts"
+      time:
+        day: "Day"
+        night: "Night"
+        sunset: "Sunset"
+        sunrise: "Sunrise"
+      weather:
+        sunny: "Sunny"
+        rainy: "Rainy"
+  messages:
+    broadcast: "<yellow>{player}</yellow> <gray>picked</gray> <aqua>{category}</aqua> <dark_gray>→</dark_gray> <white>{option}</white>"
+    selected:
+      sources:
+        popular: "by popular vote"
+        default: "by default"
+      chests: "<gray>Selected</gray> <gold>{option}</gold> <gray>chest loot {source}.</gray>"
+      hearts: "<gray>Selected</gray> <red>{option}</red> <gray>{source}.</gray>"
+      time: "<gray>Selected</gray> <yellow>{option}</yellow> <gray>time {source}.</gray>"
+      weather: "<gray>Selected</gray> <blue>{option}</blue> <gray>weather {source}.</gray>"
+    invalid: "<red>That vote option is not available.</red>"
+    not_available: "<red>You can only vote while waiting for the game to start.</red>"
+    no_permission: "<red>You do not have permission to vote for</red> <yellow>{option}</yellow><red>.</red>"
+stats:
+
+  descriptions:
+    wins: "CaptureTheWool victories"
+    games_played: "CaptureTheWool matches played"
+    kills: "Opponents eliminated in CaptureTheWool"
+    chests_looted: "Chests opened in CaptureTheWool"
+    deaths: "Times eliminated in CaptureTheWool"
+    wools_stolen: "Enemy wools picked up in CaptureTheWool"
+    wools_captured: "Objective wools captured in CaptureTheWool"
+  labels:
+    kills: "Eliminations"
+    games_played: "Capture The Wool games played"
+    wins: "Capture The Wool wins"
+    chests_looted: "Chests looted"
+    deaths: "Deaths"
+    wools_stolen: "Wools stolen"
+    wools_captured: "Wools captured"
+
+messages:
+  common:
+    boolean_true: "Yes"
+    boolean_false: "No"
+  eliminated: "<red>You died! Respawning...</red>"
+  out_of_bounds: "<yellow>You cannot leave the arena.</yellow>"
+  restricted_zone: "<red>You cannot enter this area!</red>"
+  winner_board:
+    separator: "<dark_gray><strikethrough>----------------------------------------------</strikethrough></dark_gray>"
+    title: "<white><bold>Captured Wools</bold></white>"
+    team_title: "{team}<gray>'s Captures</gray>"
+    missing_text: "Not captured"
+    unknown_player: "Unknown"
+    line_prefix: "  "
+    entry_gap: "  "
+    entries_per_line: 2
+  action_bar:
+    in_game: "<yellow>{team}</yellow> <dark_gray>•</dark_gray> <white>Wools:</white> <green>{captured}/{objectives}</green> <dark_gray>•</dark_gray> <white>K:</white> <red>{kills}</red> <white>D:</white> <gray>{deaths}</gray> <dark_gray>•</dark_gray> <white>Carrying:</white> <aqua>{carrying}</aqua>"
+  deaths:
+    killed_by_player:
+      - "<dark_red>✘</dark_red> <red>{victim}</red> <gray>was eliminated by</gray> <yellow>{killer}</yellow><gray>.</gray>"
+      - "<dark_red>✘</dark_red> <yellow>{killer}</yellow> <gray>outplayed</gray> <red>{victim}</red><gray>.</gray>"
+      - "<dark_red>✘</dark_red> <red>{victim}</red> <gray>fell to</gray> <yellow>{killer}</yellow><gray>'s attack.</gray>"
+      - "<dark_red>✘</dark_red> <yellow>{killer}</yellow> <gray>took down</gray> <red>{victim}</red><gray>.</gray>"
+    generic:
+      - "<dark_red>✘</dark_red> <red>{victim}</red> <gray>couldn't survive the chaos.</gray>"
+      - "<dark_red>✘</dark_red> <red>{victim}</red> <gray>was eliminated.</gray>"
+  wool:
+    picked_up: "<yellow>{player}</yellow> <gray>picked up a wool from team</gray> <aqua>{team}</aqua><gray>!</gray>"
+    captured: "<green><bold>WOOL CAPTURED!</bold></green> <yellow>{player}</yellow> <gray>captured a wool for team</gray> <aqua>{team}</aqua><gray>!</gray>"
+    dropped: "<red>{player}</red> <gray>dropped a wool! It has returned to its spawn.</gray>"
+    cannot_break_own: "<red>This wool belongs to your team. Defend it!</red>"
+    cannot_break: "<red>You cannot take this wool.</red>"
+    carrier_hologram: "<gold>⬛ CARRYING WOOL ⬛</gold>"
+    break_hint:
+      title: "<yellow><bold>BREAK THIS WOOL!</bold></yellow>"
+      subtitle: "<gray>Break it to carry it to your base.</gray>"
+
+titles:
+  you_died:
+    title: "<red><bold>YOU DIED</bold></red>"
+    subtitle: "<gray>Respawning...</gray>"
+  classified:
+    title: "<yellow><bold>ELIMINATED</bold></yellow>"
+    subtitle: "<gray>Respawning...</gray>"
+
+scoreboard:
+  team_size_2:
+    title: "<bold><gradient:aqua:light_purple>Blue Arcade</gradient></bold>"
+    lines:
+      - ""
+      - "<white>Arena:</white> <aqua>{arena}</aqua>"
+      - "<white>Game:</white> <aqua>Capture The Wool</aqua>"
+      - ""
+      - "<white>Team:</white> <yellow>{team}</yellow>"
+      - "<white>Your Kills:</white> <red>{kills}</red>"
+      - ""
+      - "{wool_status_team_1}"
+      - "{wool_status_team_2}"
+      - ""
+      - "<yellow>www.blueva.net</yellow>"
+  team_size_3:
+    title: "<bold><gradient:aqua:light_purple>Blue Arcade</gradient></bold>"
+    lines:
+      - ""
+      - "<white>Arena:</white> <aqua>{arena}</aqua>"
+      - "<white>Game:</white> <aqua>Capture The Wool</aqua>"
+      - ""
+      - "<white>Team:</white> <yellow>{team}</yellow>"
+      - "<white>Your Kills:</white> <red>{kills}</red>"
+      - ""
+      - "{wool_status_team_1}"
+      - "{wool_status_team_2}"
+      - "{wool_status_team_3}"
+      - ""
+      - "<yellow>www.blueva.net</yellow>"
+  team_size_4:
+    title: "<bold><gradient:aqua:light_purple>Blue Arcade</gradient></bold>"
+    lines:
+      - ""
+      - "<white>Arena:</white> <aqua>{arena}</aqua>"
+      - "<white>Game:</white> <aqua>Capture The Wool</aqua>"
+      - ""
+      - "<white>Team:</white> <yellow>{team}</yellow>"
+      - "<white>Your Kills:</white> <red>{kills}</red>"
+      - ""
+      - "{wool_status_team_1}"
+      - "{wool_status_team_2}"
+      - "{wool_status_team_3}"
+      - "{wool_status_team_4}"
+      - ""
+      - "<yellow>www.blueva.net</yellow>"
+  final:
+    winner:
+      title: "<bold><gradient:aqua:light_purple>Blue Arcade</gradient></bold>"
+      lines:
+        - ""
+        - "<white>Winner:</white>"
+        - "<green>{winning_team}</green>"
+        - ""
+        - "<green>➊</green> <white>{top_kills_1}</white> <gray>{top_kills_value_1} kills</gray>"
+        - "<gold>➋</gold> <white>{top_kills_2}</white> <gray>{top_kills_value_2} kills</gray>"
+        - "<red>➌</red> <white>{top_kills_3}</white> <gray>{top_kills_value_3} kills</gray>"
+        - "<dark_gray>➍</dark_gray> <gray>{top_kills_4}</gray> <dark_gray>{top_kills_value_4} kills</dark_gray>"
+        - "<dark_gray>➎</dark_gray> <gray>{top_kills_5}</gray> <dark_gray>{top_kills_value_5} kills</dark_gray>"
+        - ""
+        - "<yellow>www.blueva.net</yellow>"
+setup_messages:
+  common:
+    boolean_true: "Yes"
+    boolean_false: "No"
+  team:
+    usage: "<red>Usage:</red> <yellow>/baa game <id> capture_the_wool team <count|size> <value></yellow>"
+    success: "<green>Team {setting} set to {value} for {game} in arena {arena_id}.</green>"
+    invalid_limit: "<red>Team configuration exceeds arena max players ({max_players}).</red>"
+    invalid_value: "<red>Team {setting} must be greater than 0.</red>"
+    invalid_count: "<red>Team count must be at least 2.</red>"
+    invalid_size: "<red>Team size must be at least 2.</red>"
+    numeric_ids_only: "<red>team_id must be numeric and within configured range: <white>{min}</white> to <white>{max}</white>.</red>"
+  search_chests:
+    missing_bounds: "<red>Game bounds are not configured yet.</red>"
+    start: "<yellow>Searching for chests... ({blocks} blocks to scan)</yellow>"
+    action_bar: "<gold>Searching chests</gold> <gray>(Time elapsed: {time})</gray> <dark_gray>•</dark_gray> <green>{found}</green>"
+    complete: "<green>Chest search completed.</green> <yellow>Found {found} chests in {time}.</yellow>"
+  region:
+    usage: "<red>Usage:</red> <yellow>/baa game <id> capture_the_wool region <set|clear></yellow>"
+    must_use_stick: "<red>Select two corners with the setup tool first.</red>"
+    set: "<green>Regeneration region saved.</green> <gray>Blocks:</gray> <white>{blocks}</white> <gray>({x}x{y}x{z})</gray>"
+    cleared: "<yellow>Regeneration region cleared.</yellow>"
+
+  wool:
+    usage: "<red>Usage:</red> <yellow>/baa game <id> capture_the_wool wool <create|capture|clearcapture|list> ...</yellow>"
+    create_usage: "<red>Usage:</red> <yellow>/baa game <id> capture_the_wool wool create <wool_id> <MATERIAL> <owner_team></yellow>"
+    capture_usage: "<red>Usage:</red> <yellow>/baa game <id> capture_the_wool wool capture <wool_id> <capture_team></yellow>"
+    clear_capture_usage: "<red>Usage:</red> <yellow>/baa game <id> capture_the_wool wool clearcapture <wool_id></yellow>"
+    must_use_stick: "<red>Select exactly one block with the magic stick first.</red>"
+    single_block_only: "<red>Each wool objective uses exactly one block.</red>"
+    created: "<green>Wool <white>{wool}</white> created. Material: <white>{material}</white>, owner team: <white>{team}</white>.</green>"
+    capture_set: "<green>Capture point saved for wool <white>{wool}</white>. Owner: <white>{owner_team}</white>, stealing teams: <white>{capture_team}</white>.</green>"
+    capture_cleared: "<yellow>Capture configuration cleared for wool <white>{wool}</white>.</yellow>"
+    list_header: "<gold>Configured wools by team:</gold>"
+    list_line: "<gray>- Team <white>{team}</white> | wool <white>{wool}</white> | steals: <white>{capture_team}</white> | material: <white>{material}</white></gray>"
+    list_empty: "<yellow>No wools configured yet.</yellow>"
+    not_found: "<red>Wool <white>{wool}</white> does not exist. Create it first.</red>"
+    invalid_team: "<red>Invalid team id: <white>{team}</white>.</red>"
+    capture_owner_forbidden: "<red>Team <white>{team}</white> owns wool <white>{wool}</white>. Owner team cannot be the capture team.</red>"
+    invalid_material: "<red>Invalid material: {material}. Use a valid Bukkit material name (e.g., YELLOW_WOOL).</red>"
+  team_spawn:
+    usage: "<red>Usage:</red> <yellow>/baa game <id> capture_the_wool team spawn <team_id></yellow>"
+    set: "<green>Team spawn set for team <white>{team}</white> at your current location.</green>"
+  team_zone:
+    usage: "<red>Usage:</red> <yellow>/baa game <id> capture_the_wool team zone <create|list|delete> ...</yellow>"
+    create_usage: "<red>Usage:</red> <yellow>/baa game <id> capture_the_wool team zone create <team_id></yellow>"
+    delete_usage: "<red>Usage:</red> <yellow>/baa game <id> capture_the_wool team zone delete <team_id> <index></yellow>"
+    must_use_stick: "<red>Select two corners with the setup tool first.</red>"
+    set: "<green>Restricted zone #{index} set for team <white>{team}</white>.</green>"
+    deleted: "<yellow>Restricted zone #{index} deleted for team <white>{team}</white>.</yellow>"
+    not_found: "<red>Restricted zone #{index} for team <white>{team}</white> does not exist.</red>"
+    list_header: "<gold>Restricted zones by team:</gold>"
+    list_line: "<gray>- Team <white>{team}</white> | zone <white>#{index}</white></gray>"
+    list_empty: "<yellow>No restricted zones configured yet.</yellow>"

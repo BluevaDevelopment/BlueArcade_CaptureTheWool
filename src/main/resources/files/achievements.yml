@@ -1,0 +1,513 @@
+file_version: 1
+category:
+  id: capture_the_wool
+  name: "Capture The Wool"
+  description:
+    - "Achievements tied to Capture The Wool."
+  icon: DRAGON_HEAD
+  sort_order: 22
+
+achievements:
+  drop_veteran:
+    name: "Skybound"
+    description:
+      - "Play Capture The Wool matches."
+    icon: DRAGON_HEAD
+    phases:
+      1:
+        name: "First flight"
+        description:
+          - "Play 1 match."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_games_played} >= 1"
+        rewards:
+          commands:
+            - "baa credits give {player} 10"
+            - "baa xp give {player} 10"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+10 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+10 XP</light_purple>"
+      2:
+        name: "Warm-up"
+        description:
+          - "Play 10 matches."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_games_played} >= 10"
+        rewards:
+          commands:
+            - "baa credits give {player} 25"
+            - "baa xp give {player} 25"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+25 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+25 XP</light_purple>"
+      3:
+        name: "Survivor"
+        description:
+          - "Play 25 matches."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_games_played} >= 25"
+        rewards:
+          commands:
+            - "baa credits give {player} 40"
+            - "baa xp give {player} 40"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+40 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+40 XP</light_purple>"
+      4:
+        name: "Storm rider"
+        description:
+          - "Play 50 matches."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_games_played} >= 50"
+        rewards:
+          commands:
+            - "baa credits give {player} 60"
+            - "baa xp give {player} 60"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+60 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+60 XP</light_purple>"
+      5:
+        name: "Capture The Wool legend"
+        description:
+          - "Play 100 matches."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_games_played} >= 100"
+        rewards:
+          commands:
+            - "baa credits give {player} 90"
+            - "baa xp give {player} 90"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+90 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+90 XP</light_purple>"
+
+  eliminator:
+    name: "Eliminator"
+    description:
+      - "Eliminate opponents."
+    icon: DIAMOND_SWORD
+    phases:
+      1:
+        name: "Opening strike"
+        description:
+          - "Eliminate 1 player."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_kills} >= 1"
+        rewards:
+          commands:
+            - "baa credits give {player} 20"
+            - "baa xp give {player} 20"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+20 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+20 XP</light_purple>"
+      2:
+        name: "Duelist"
+        description:
+          - "Eliminate 10 players."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_kills} >= 10"
+        rewards:
+          commands:
+            - "baa credits give {player} 45"
+            - "baa xp give {player} 45"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+45 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+45 XP</light_purple>"
+      3:
+        name: "Arena menace"
+        description:
+          - "Eliminate 25 players."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_kills} >= 25"
+        rewards:
+          commands:
+            - "baa credits give {player} 70"
+            - "baa xp give {player} 70"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+70 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+70 XP</light_purple>"
+      4:
+        name: "Arena ace"
+        description:
+          - "Eliminate 50 players."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_kills} >= 50"
+        rewards:
+          commands:
+            - "baa credits give {player} 90"
+            - "baa xp give {player} 90"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+90 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+90 XP</light_purple>"
+      5:
+        name: "Battlefield champion"
+        description:
+          - "Eliminate 100 players."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_kills} >= 100"
+        rewards:
+          commands:
+            - "baa credits give {player} 120"
+            - "baa xp give {player} 120"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+120 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+120 XP</light_purple>"
+
+  loot_runner:
+    name: "Loot Runner"
+    description:
+      - "Loot chests across the island."
+    icon: CHEST
+    phases:
+      1:
+        name: "Quick grab"
+        description:
+          - "Loot 5 chests."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_chests_looted} >= 5"
+        rewards:
+          commands:
+            - "baa credits give {player} 15"
+            - "baa xp give {player} 15"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+15 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+15 XP</light_purple>"
+      2:
+        name: "Supply seeker"
+        description:
+          - "Loot 20 chests."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_chests_looted} >= 20"
+        rewards:
+          commands:
+            - "baa credits give {player} 35"
+            - "baa xp give {player} 35"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+35 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+35 XP</light_purple>"
+      3:
+        name: "Treasure tracker"
+        description:
+          - "Loot 50 chests."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_chests_looted} >= 50"
+        rewards:
+          commands:
+            - "baa credits give {player} 55"
+            - "baa xp give {player} 55"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+55 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+55 XP</light_purple>"
+      4:
+        name: "Armory hunter"
+        description:
+          - "Loot 100 chests."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_chests_looted} >= 100"
+        rewards:
+          commands:
+            - "baa credits give {player} 80"
+            - "baa xp give {player} 80"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+80 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+80 XP</light_purple>"
+      5:
+        name: "Vault raider"
+        description:
+          - "Loot 200 chests."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_chests_looted} >= 200"
+        rewards:
+          commands:
+            - "baa credits give {player} 120"
+            - "baa xp give {player} 120"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+120 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+120 XP</light_purple>"
+
+  champion:
+    name: "Champion"
+    description:
+      - "Win Capture The Wool matches."
+    icon: NETHER_STAR
+    phases:
+      1:
+        name: "First banner"
+        description:
+          - "Win 1 match."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_wins} >= 1"
+        rewards:
+          commands:
+            - "baa credits give {player} 25"
+            - "baa xp give {player} 25"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+25 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+25 XP</light_purple>"
+      2:
+        name: "Reliable winner"
+        description:
+          - "Win 10 matches."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_wins} >= 10"
+        rewards:
+          commands:
+            - "baa credits give {player} 50"
+            - "baa xp give {player} 50"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+50 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+50 XP</light_purple>"
+      3:
+        name: "Flag bearer"
+        description:
+          - "Win 25 matches."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_wins} >= 25"
+        rewards:
+          commands:
+            - "baa credits give {player} 80"
+            - "baa xp give {player} 80"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+80 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+80 XP</light_purple>"
+      4:
+        name: "Unstoppable"
+        description:
+          - "Win 50 matches."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_wins} >= 50"
+        rewards:
+          commands:
+            - "baa credits give {player} 110"
+            - "baa xp give {player} 110"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+110 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+110 XP</light_purple>"
+      5:
+        name: "Wool master"
+        description:
+          - "Win 100 matches."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_wins} >= 100"
+        rewards:
+          commands:
+            - "baa credits give {player} 150"
+            - "baa xp give {player} 150"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+150 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+150 XP</light_purple>"
+
+  wool_thief:
+    name: "Wool Thief"
+    description:
+      - "Steal enemy objective wools."
+    icon: SHEARS
+    phases:
+      1:
+        name: "First steal"
+        description:
+          - "Steal 1 wool."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_wools_stolen} >= 1"
+        rewards:
+          commands:
+            - "baa credits give {player} 20"
+            - "baa xp give {player} 20"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+20 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+20 XP</light_purple>"
+      2:
+        name: "Sneaky hands"
+        description:
+          - "Steal 10 wools."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_wools_stolen} >= 10"
+        rewards:
+          commands:
+            - "baa credits give {player} 45"
+            - "baa xp give {player} 45"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+45 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+45 XP</light_purple>"
+      3:
+        name: "Objective infiltrator"
+        description:
+          - "Steal 25 wools."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_wools_stolen} >= 25"
+        rewards:
+          commands:
+            - "baa credits give {player} 70"
+            - "baa xp give {player} 70"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+70 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+70 XP</light_purple>"
+      4:
+        name: "Silent raider"
+        description:
+          - "Steal 50 wools."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_wools_stolen} >= 50"
+        rewards:
+          commands:
+            - "baa credits give {player} 95"
+            - "baa xp give {player} 95"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+95 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+95 XP</light_purple>"
+      5:
+        name: "Master infiltrator"
+        description:
+          - "Steal 100 wools."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_wools_stolen} >= 100"
+        rewards:
+          commands:
+            - "baa credits give {player} 130"
+            - "baa xp give {player} 130"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+130 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+130 XP</light_purple>"
+
+  wool_captain:
+    name: "Wool Captain"
+    description:
+      - "Capture objective wools for your team."
+    icon: WHITE_WOOL
+    phases:
+      1:
+        name: "First capture"
+        description:
+          - "Capture 1 wool."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_wools_captured} >= 1"
+        rewards:
+          commands:
+            - "baa credits give {player} 25"
+            - "baa xp give {player} 25"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+25 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+25 XP</light_purple>"
+      2:
+        name: "Point scorer"
+        description:
+          - "Capture 10 wools."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_wools_captured} >= 10"
+        rewards:
+          commands:
+            - "baa credits give {player} 55"
+            - "baa xp give {player} 55"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+55 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+55 XP</light_purple>"
+      3:
+        name: "Objective leader"
+        description:
+          - "Capture 25 wools."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_wools_captured} >= 25"
+        rewards:
+          commands:
+            - "baa credits give {player} 85"
+            - "baa xp give {player} 85"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+85 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+85 XP</light_purple>"
+      4:
+        name: "Wool finisher"
+        description:
+          - "Capture 50 wools."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_wools_captured} >= 50"
+        rewards:
+          commands:
+            - "baa credits give {player} 115"
+            - "baa xp give {player} 115"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+115 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+115 XP</light_purple>"
+      5:
+        name: "Wool commander"
+        description:
+          - "Capture 100 wools."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_wools_captured} >= 100"
+        rewards:
+          commands:
+            - "baa credits give {player} 150"
+            - "baa xp give {player} 150"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+150 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+150 XP</light_purple>"
+
+  battle_hardened:
+    name: "Battle Hardened"
+    description:
+      - "Keep fighting even after many defeats."
+    icon: TOTEM_OF_UNDYING
+    phases:
+      1:
+        name: "Bruised"
+        description:
+          - "Die 10 times."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_deaths} >= 10"
+        rewards:
+          commands:
+            - "baa credits give {player} 10"
+            - "baa xp give {player} 10"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+10 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+10 XP</light_purple>"
+      2:
+        name: "Toughened"
+        description:
+          - "Die 50 times."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_deaths} >= 50"
+        rewards:
+          commands:
+            - "baa credits give {player} 30"
+            - "baa xp give {player} 30"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+30 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+30 XP</light_purple>"
+      3:
+        name: "Unbreakable"
+        description:
+          - "Die 100 times."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_deaths} >= 100"
+        rewards:
+          commands:
+            - "baa credits give {player} 50"
+            - "baa xp give {player} 50"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+50 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+50 XP</light_purple>"
+      4:
+        name: "Never gives up"
+        description:
+          - "Die 250 times."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_deaths} >= 250"
+        rewards:
+          commands:
+            - "baa credits give {player} 75"
+            - "baa xp give {player} 75"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+75 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+75 XP</light_purple>"
+      5:
+        name: "Iron spirit"
+        description:
+          - "Die 500 times."
+        conditions:
+          - "{bluearcade_stat_module_capture_the_wool_deaths} >= 500"
+        rewards:
+          commands:
+            - "baa credits give {player} 100"
+            - "baa xp give {player} 100"
+          messages:
+            - "  <gold>⛁</gold> <yellow>+100 credits</yellow>"
+            - "  <dark_purple>✹</dark_purple> <light_purple>+100 XP</light_purple>"
