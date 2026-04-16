@@ -48,6 +48,7 @@ Finish the setup with the commands below:
 - `/baa game [arena_id] capture_the_wool team count <value>` — Set the number of teams (minimum 2).
 - `/baa game [arena_id] capture_the_wool team size <value>` — Set the players per team (minimum 2).
 - `/baa game [arena_id] capture_the_wool team spawn <team_id>` — Set the spawn point for a team at your current location.
+- `/baa game [arena_id] capture_the_wool team spawn remove <team_id>` — Remove the spawn point for a specific team.
 - `/baa game [arena_id] capture_the_wool team zone <team_id>` — Add a restricted zone for a team (select region with the setup tool).
 - `/baa game [arena_id] capture_the_wool wool create <wool_id> <MATERIAL> <owner_team>` — Create a wool objective with shared ID, material, owner team, and spawn point (select exactly one block with the setup tool).
 - `/baa game [arena_id] capture_the_wool wool capture <wool_id> <capture_team>` — Set capture point and stealing team for that wool (select exactly one block with the setup tool). The owner team is rejected as capture team.

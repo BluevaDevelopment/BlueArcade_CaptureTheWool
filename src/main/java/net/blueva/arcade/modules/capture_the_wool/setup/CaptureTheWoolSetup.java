@@ -60,6 +60,11 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
         }
         if (context.getRelativeArgIndex() == 1
                 && "team".equalsIgnoreCase(context.getArg(context.getStartIndex() - 1))
+                && "spawn".equalsIgnoreCase(context.getArg(context.getStartIndex()))) {
+            return TabCompleteResult.of("remove");
+        }
+        if (context.getRelativeArgIndex() == 1
+                && "team".equalsIgnoreCase(context.getArg(context.getStartIndex() - 1))
                 && "zone".equalsIgnoreCase(context.getArg(context.getStartIndex()))) {
             return TabCompleteResult.of("create", "list", "delete");
         }
@@ -438,12 +443,19 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
     private boolean handleTeamSpawn(SetupContext<Player, CommandSender, Location> context) {
         if (!context.hasHandlerArgs(2)) {
             context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_spawn.usage"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_spawn.usage_remove"));
             return true;
         }
 
-        String teamId = normalizeTeamId(context.getHandlerArg(1));
+        String firstArg = context.getHandlerArg(1);
+        if ("remove".equalsIgnoreCase(firstArg)) {
+            return handleTeamSpawnRemove(context);
+        }
+
+        String teamId = normalizeTeamId(firstArg);
         if (teamId == null) {
             context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_spawn.usage"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_spawn.usage_remove"));
             sendTeamIdRangeMessage(context);
             return true;
         }
@@ -464,6 +476,39 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
         context.getData().save();
 
         context.getMessagesAPI().sendRaw(player, getSetupMessage("team_spawn.set")
+                .replace("{team}", teamId));
+        return true;
+    }
+
+    private boolean handleTeamSpawnRemove(SetupContext<Player, CommandSender, Location> context) {
+        if (!context.hasHandlerArgs(3)) {
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_spawn.usage_remove"));
+            return true;
+        }
+
+        int teamCount = context.getData().getInt("teams.count", 0);
+        if (teamCount <= 0) {
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_spawn.teams_not_configured"));
+            return true;
+        }
+
+        String teamId = normalizeTeamId(context.getHandlerArg(2));
+        if (teamId == null) {
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_spawn.usage_remove"));
+            sendTeamIdRangeMessage(context);
+            return true;
+        }
+
+        if (!isExistingTeam(context, teamId)) {
+            sendTeamIdRangeMessage(context);
+            return true;
+        }
+
+        String path = "game.play_area.team_spawns." + teamId.toLowerCase();
+        context.getData().remove(path);
+        context.getData().save();
+
+        context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_spawn.removed")
                 .replace("{team}", teamId));
         return true;
     }

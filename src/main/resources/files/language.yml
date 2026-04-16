@@ -1,4 +1,4 @@
-file_version: 1
+file_version: 2
 display_name: "Capture The Wool"
 
 description:
@@ -224,7 +224,10 @@ setup_messages:
     invalid_material: "<red>Invalid material: {material}. Use a valid Bukkit material name (e.g., YELLOW_WOOL).</red>"
   team_spawn:
     usage: "<red>Usage:</red> <yellow>/baa game <id> capture_the_wool team spawn <team_id></yellow>"
+    usage_remove: "<red>Usage:</red> <yellow>/baa game <id> capture_the_wool team spawn remove <team_id></yellow>"
+    teams_not_configured: "<red>Team count is not configured yet. Set it first with <yellow>/baa game <id> capture_the_wool team count <n></yellow>.</red>"
     set: "<green>Team spawn set for team <white>{team}</white> at your current location.</green>"
+    removed: "<yellow>Team spawn removed for team <white>{team}</white>.</yellow>"
   team_zone:
     usage: "<red>Usage:</red> <yellow>/baa game <id> capture_the_wool team zone <create|list|delete> ...</yellow>"
     create_usage: "<red>Usage:</red> <yellow>/baa game <id> capture_the_wool team zone create <team_id></yellow>"
