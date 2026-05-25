@@ -1,4 +1,4 @@
-file_version: 1
+file_version: 2
 type: SIMPLE
 menuName: '<aqua>Capture The Wool vote settings</aqua>'
 
@@ -7,11 +7,6 @@ content:
   - '<gray>Your votes are shared with everyone.</gray>'
 
 buttons:
-  chests:
-    text: '<gold>Chest loot</gold>'
-    image: 'https://blueva.net/api/menu/items/1_21_10/minecraft_chest.png'
-    actions:
-      - 'OPEN;capture_the_wool_vote_chests'
   hearts:
     text: '<red>Hearts</red>'
     image: 'https://blueva.net/api/menu/items/1_21_10/minecraft_apple.png'

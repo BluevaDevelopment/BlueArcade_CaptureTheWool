@@ -1,0 +1,670 @@
+package net.blueva.arcade.modules.capture_the_wool.support.vote;
+
+import net.blueva.arcade.api.ModuleAPI;
+import net.blueva.arcade.api.config.ModuleConfigAPI;
+import net.blueva.arcade.api.arena.ArenaAPI;
+import net.blueva.arcade.api.game.GameContext;
+import net.blueva.arcade.api.game.GamePhase;
+import net.blueva.arcade.api.ui.ItemAPI;
+import net.blueva.arcade.api.ui.LobbyItemDefinition;
+import net.blueva.arcade.api.ui.MenuAPI;
+import net.blueva.arcade.api.ui.MessageAPI;
+import net.blueva.arcade.api.ui.menu.MenuDefinition;
+import net.blueva.arcade.api.utils.PlayerUtil;
+import net.blueva.arcade.modules.capture_the_wool.game.CaptureTheWoolGame;
+import net.blueva.arcade.modules.capture_the_wool.state.ArenaState;
+import net.blueva.arcade.modules.capture_the_wool.state.VoteState;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
+public class CaptureTheWoolVoteService {
+
+    private static final String VOTE_PERMISSION_BASE = "bluearcade.capture_the_wool.votes";
+    private static final String WAITING_ITEM_ID = "capture_the_wool_vote_settings";
+    public static final String COMMAND = "capture_the_woolvote";
+    public static final String MENU_MAIN = "vote_main";
+    public static final String MENU_HEARTS = "vote_hearts";
+    public static final String MENU_TIME = "vote_time";
+    public static final String MENU_WEATHER = "vote_weather";
+
+    private static final Set<String> HEART_OPTIONS = Set.of("10", "20", "30");
+    private static final Set<String> TIME_OPTIONS = Set.of("day", "night", "sunset", "sunrise");
+    private static final Set<String> WEATHER_OPTIONS = Set.of("sunny", "rainy");
+
+    private final ModuleConfigAPI moduleConfig;
+    private final MenuAPI<Player, Material> menuAPI;
+    private final ItemAPI<Player, ItemStack, Material> itemAPI;
+    private final String moduleId;
+    private final CaptureTheWoolVoteMenuRepository menuRepository;
+    private final VoteState waitingVoteState;
+    private CaptureTheWoolGame game;
+
+    public CaptureTheWoolVoteService(ModuleConfigAPI moduleConfig,
+                              MenuAPI<Player, Material> menuAPI,
+                              ItemAPI<Player, ItemStack, Material> itemAPI,
+                              String moduleId) {
+        this.moduleConfig = moduleConfig;
+        this.menuAPI = menuAPI;
+        this.itemAPI = itemAPI;
+        this.moduleId = moduleId;
+        this.menuRepository = new CaptureTheWoolVoteMenuRepository(moduleConfig);
+        this.menuRepository.loadMenus();
+        registerMenusWithCore();
+        this.waitingVoteState = createVoteState();
+    }
+
+    private void registerMenusWithCore() {
+        if (menuAPI != null) {
+            CaptureTheWoolMenuAPI captureTheWoolMenuAPI = new CaptureTheWoolMenuAPI(menuAPI, this);
+            menuAPI.registerModuleMenuAPI(moduleId, captureTheWoolMenuAPI);
+            menuAPI.registerModuleMenuAPI("capture", captureTheWoolMenuAPI);
+        }
+    }
+
+    public VoteState createVoteState() {
+        Map<VoteCategory, String> defaults = new EnumMap<>(VoteCategory.class);
+        defaults.put(VoteCategory.HEARTS, normalizeOption(moduleConfig.getString("votes.defaults.hearts", "10"), HEART_OPTIONS, "10"));
+        defaults.put(VoteCategory.TIME, normalizeOption(moduleConfig.getString("votes.defaults.time", "day"), TIME_OPTIONS, "day"));
+        defaults.put(VoteCategory.WEATHER, normalizeOption(moduleConfig.getString("votes.defaults.weather", "sunny"), WEATHER_OPTIONS, "sunny"));
+        return new VoteState(defaults);
+    }
+
+    public void setGame(CaptureTheWoolGame game) {
+        this.game = game;
+    }
+
+    public void applyPendingVotes(ArenaState state, List<Player> players) {
+        if (state == null || players == null || players.isEmpty()) {
+            return;
+        }
+        VoteState voteState = state.getVoteState();
+        if (voteState == null) {
+            return;
+        }
+
+        for (Player player : players) {
+            if (player == null) {
+                continue;
+            }
+            for (VoteCategory category : VoteCategory.values()) {
+                String option = waitingVoteState.getPlayerVote(player.getUniqueId(), category);
+                if (option != null) {
+                    voteState.castVote(player.getUniqueId(), category, option);
+                }
+            }
+            waitingVoteState.clearPlayerVotes(player.getUniqueId());
+        }
+        waitingVoteState.clearAll();
+    }
+
+    public void registerWaitingItem() {
+        if (itemAPI == null || moduleConfig == null) {
+            return;
+        }
+        if (!isWaitingItemEnabled()) {
+            unregisterWaitingItem();
+            return;
+        }
+
+        String materialName = moduleConfig.getString("waiting_items.vote_settings.material", "NAME_TAG");
+        Material material;
+        try {
+            material = Material.valueOf(materialName.toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException ex) {
+            material = Material.NAME_TAG;
+        }
+        LobbyItemDefinition<Material> definition = new LobbyItemDefinition<>(
+                WAITING_ITEM_ID,
+                material,
+                moduleConfig.getInt("waiting_items.vote_settings.slot"),
+                moduleConfig.getString("waiting_items.vote_settings.display_name"),
+                moduleConfig.getStringList("waiting_items.vote_settings.lore"),
+                List.of(),
+                true
+        );
+        itemAPI.registerWaitingItem(moduleId, definition);
+    }
+
+    public void registerClickHandler(CaptureTheWoolGame game) {
+        if (itemAPI == null) {
+            return;
+        }
+        if (!isWaitingItemEnabled()) {
+            itemAPI.unregisterClickHandler(WAITING_ITEM_ID);
+            return;
+        }
+        itemAPI.registerClickHandler(WAITING_ITEM_ID,
+                player -> game.handleVoteCommand(player, new String[]{"menu", "main"}));
+    }
+
+    public void unregisterWaitingItem() {
+        if (itemAPI == null) {
+            return;
+        }
+        itemAPI.unregisterWaitingItem(WAITING_ITEM_ID);
+        itemAPI.unregisterClickHandler(WAITING_ITEM_ID);
+    }
+
+    private boolean isWaitingItemEnabled() {
+        return moduleConfig != null && moduleConfig.getBoolean("waiting_items.vote_settings.enabled", true);
+    }
+
+    public boolean handleVoteCommand(Player player,
+                                     GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context,
+                                     ArenaState state,
+                                     String[] args) {
+        if (player == null || context == null || state == null) {
+            return false;
+        }
+
+        GamePhase phase = context.getPhase();
+        if (phase == GamePhase.PLAYING || phase == GamePhase.ENDING || phase == GamePhase.FINISHED) {
+            sendMessage(context, player, "votes.messages.not_available");
+            return true;
+        }
+
+        String[] safeArgs = args != null ? args : new String[0];
+        if (safeArgs.length == 0) {
+            return openMenu(player, state, MENU_MAIN);
+        }
+
+        String action = safeArgs[0].toLowerCase(Locale.ROOT);
+        if (action.equals("menu")) {
+            return openMenu(player, state, mapMenuId(safeArgs.length > 1 ? safeArgs[1] : "main"));
+        }
+        if (action.equals("vote")) {
+            return castVote(player, context, state.getVoteState(), safeArgs);
+        }
+        return openMenu(player, state, MENU_MAIN);
+    }
+
+    public boolean handleVoteCommandWithoutContext(Player player, String[] args) {
+        if (player == null) {
+            return false;
+        }
+
+        String[] safeArgs = args != null ? args : new String[0];
+        if (safeArgs.length == 0) {
+            return openMenuWithDefaults(player, safeArgs);
+        }
+
+        String action = safeArgs[0].toLowerCase(Locale.ROOT);
+        if (action.equals("menu")) {
+            return openMenuWithDefaults(player, safeArgs);
+        }
+        if (action.equals("vote")) {
+            if (!castWaitingVote(player, safeArgs)) {
+                return true;
+            }
+            return openMenuWithDefaults(player, new String[]{"menu", "main"});
+        }
+        return false;
+    }
+
+    public void applyVotes(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context,
+                           ArenaState state) {
+        if (context == null || state == null || state.getVoteState() == null) {
+            return;
+        }
+
+        VoteState voteState = state.getVoteState();
+        String hearts = voteState.resolveWinner(VoteCategory.HEARTS);
+        String time = voteState.resolveWinner(VoteCategory.TIME);
+        String weather = voteState.resolveWinner(VoteCategory.WEATHER);
+
+        state.setSelectedHearts(resolveHearts(hearts));
+        state.setSelectedTime(time);
+        state.setSelectedWeather(weather);
+
+        applyHearts(context, state.getSelectedHearts());
+        applyWorldTime(context, time);
+        applyWeather(context, weather);
+    }
+
+    public void broadcastVoteResults(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context,
+                                     ArenaState state) {
+        if (context == null || state == null || state.getVoteState() == null) {
+            return;
+        }
+        VoteState voteState = state.getVoteState();
+        broadcastResultForCategory(context, voteState, VoteCategory.HEARTS, "votes.messages.selected.hearts");
+        broadcastResultForCategory(context, voteState, VoteCategory.TIME, "votes.messages.selected.time");
+        broadcastResultForCategory(context, voteState, VoteCategory.WEATHER, "votes.messages.selected.weather");
+    }
+
+    public boolean openMenuWithDefaults(Player player, String[] args) {
+        return openMenuWithDefaults(player, waitingVoteState, args);
+    }
+
+    public boolean openMenuWithDefaults(Player player, VoteState voteState, String[] args) {
+        if (menuAPI == null || player == null) {
+            return false;
+        }
+        String menuId = MENU_MAIN;
+        if (args != null && args.length > 1 && args[0].equalsIgnoreCase("menu")) {
+            menuId = mapMenuId(args[1]);
+        }
+        return openMenu(player, voteState, menuId);
+    }
+
+    public boolean openMenu(Player player, ArenaState state, String menuId) {
+        return openMenu(player, state != null ? state.getVoteState() : null, menuId);
+    }
+
+    public boolean openMenu(Player player, VoteState voteState, String menuId) {
+        if (menuAPI == null) {
+            return false;
+        }
+        MenuDefinition<Material> menu = menuRepository.getMenu(menuId);
+        if (menu == null) {
+            return false;
+        }
+        return menuAPI.openMenu(player, menu, buildPlaceholders(player, voteState));
+    }
+
+    public Map<String, String> buildPlaceholders(Player player, VoteState voteState) {
+        Map<String, String> placeholders = new java.util.HashMap<>();
+        placeholders.put("{selected_hearts}", resolveWinningLabel(voteState, VoteCategory.HEARTS, HEART_OPTIONS));
+        placeholders.put("{selected_time}", resolveWinningLabel(voteState, VoteCategory.TIME, TIME_OPTIONS));
+        placeholders.put("{selected_weather}", resolveWinningLabel(voteState, VoteCategory.WEATHER, WEATHER_OPTIONS));
+        placeholders.put("{player_vote_hearts}", resolvePlayerVoteLabel(player, voteState, VoteCategory.HEARTS));
+        placeholders.put("{player_vote_time}", resolvePlayerVoteLabel(player, voteState, VoteCategory.TIME));
+        placeholders.put("{player_vote_weather}", resolvePlayerVoteLabel(player, voteState, VoteCategory.WEATHER));
+        for (String option : HEART_OPTIONS) {
+            placeholders.put("{votes_hearts_" + option + "}", String.valueOf(voteState != null ? voteState.getVotes(VoteCategory.HEARTS, option) : 0));
+        }
+        for (String option : TIME_OPTIONS) {
+            placeholders.put("{votes_time_" + option + "}", String.valueOf(voteState != null ? voteState.getVotes(VoteCategory.TIME, option) : 0));
+        }
+        for (String option : WEATHER_OPTIONS) {
+            placeholders.put("{votes_weather_" + option + "}", String.valueOf(voteState != null ? voteState.getVotes(VoteCategory.WEATHER, option) : 0));
+        }
+        return placeholders;
+    }
+
+    private boolean castVote(Player player,
+                             GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context,
+                             VoteState voteState,
+                             String[] args) {
+        VoteOption option = parseVoteOption(args);
+        if (option == null) {
+            sendMessage(context, player, "votes.messages.invalid");
+            return true;
+        }
+        if (!hasVotePermission(player, option.category(), option.option())) {
+            sendMessage(context, player, "votes.messages.no_permission", option.category(), option.option());
+            return true;
+        }
+        if (voteState != null) {
+            voteState.castVote(player.getUniqueId(), option.category(), option.option());
+            broadcastVote(player, option.category(), option.option(), context, voteState);
+        }
+        return true;
+    }
+
+    private boolean castWaitingVote(Player player, String[] args) {
+        VoteOption option = parseVoteOption(args);
+        if (option == null) {
+            sendWaitingMessage(player, "votes.messages.invalid");
+            return false;
+        }
+        if (!hasVotePermission(player, option.category(), option.option())) {
+            sendWaitingMessage(player, "votes.messages.no_permission", option.category(), option.option());
+            return false;
+        }
+        waitingVoteState.castVote(player.getUniqueId(), option.category(), option.option());
+        broadcastWaitingVote(player, option.category(), option.option(), waitingVoteState);
+        return true;
+    }
+
+    private VoteOption parseVoteOption(String[] args) {
+        if (args == null || args.length < 3) {
+            return null;
+        }
+        VoteCategory category = VoteCategory.fromId(args[1]);
+        String option = args[2].toLowerCase(Locale.ROOT);
+        return category != null && isOptionValid(category, option) ? new VoteOption(category, option) : null;
+    }
+
+    private void sendMessage(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context,
+                             Player player,
+                             String path) {
+        sendMessage(context, player, path, null, null);
+    }
+
+    private void sendMessage(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context,
+                             Player player,
+                             String path,
+                             VoteCategory category,
+                             String option) {
+        String message = formatVoteMessage(path, category, option);
+        if (message.isBlank()) {
+            return;
+        }
+        context.getMessagesAPI().sendRaw(player, message);
+    }
+
+    private void sendWaitingMessage(Player player, String path) {
+        sendWaitingMessage(player, path, null, null);
+    }
+
+    private void sendWaitingMessage(Player player, String path, VoteCategory category, String option) {
+        String message = formatVoteMessage(path, category, option);
+        if (message.isBlank()) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        MessageAPI<Player> messagesAPI = (MessageAPI<Player>) ModuleAPI.getMessagesAPI();
+        if (messagesAPI != null) {
+            messagesAPI.sendRaw(player, message);
+        } else {
+            player.sendMessage(message);
+        }
+    }
+
+    private String formatVoteMessage(String path, VoteCategory category, String option) {
+        String message = moduleConfig.getStringFrom("language.yml", path, "");
+        if (message == null || message.isBlank()) {
+            return "";
+        }
+        if (category != null) {
+            message = message.replace("{category}", getCategoryLabel(category));
+        }
+        if (option != null) {
+            message = message.replace("{option}", getOptionLabel(category, option));
+        }
+        return message;
+    }
+
+    private void broadcastVote(Player player,
+                               VoteCategory category,
+                               String option,
+                               GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context,
+                               VoteState voteState) {
+        String message = voteBroadcastMessage(player, category, option, voteState);
+        if (message.isBlank()) {
+            return;
+        }
+        MessageAPI<Player> messagesAPI = context.getMessagesAPI();
+        for (Player target : context.getPlayers()) {
+            if (target != null) {
+                messagesAPI.sendRaw(target, message);
+            }
+        }
+    }
+
+    private void broadcastWaitingVote(Player player, VoteCategory category, String option, VoteState voteState) {
+        String message = voteBroadcastMessage(player, category, option, voteState);
+        if (message.isBlank()) {
+            return;
+        }
+        GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context = game != null ? game.getContext(player) : null;
+        if (context != null) {
+            broadcastVote(player, category, option, context, voteState);
+            return;
+        }
+        if (isPlayerInWaitingArena(player)) {
+            broadcastToWaitingArena(player, message);
+        }
+    }
+
+    private String voteBroadcastMessage(Player player, VoteCategory category, String option, VoteState voteState) {
+        String message = moduleConfig.getStringFrom("language.yml", "votes.messages.broadcast", "");
+        if (message == null || message.isBlank()) {
+            return "";
+        }
+        int voteCount = voteState != null ? voteState.getVotes(category, option) : 0;
+        return message.replace("{player}", player.getName())
+                .replace("{category}", getCategoryLabel(category))
+                .replace("{option}", getOptionLabel(category, option))
+                .replace("{votes}", String.valueOf(voteCount));
+    }
+
+    private void sendWaitingMessageRaw(Player player, String message) {
+        @SuppressWarnings("unchecked")
+        MessageAPI<Player> messagesAPI = (MessageAPI<Player>) ModuleAPI.getMessagesAPI();
+        if (messagesAPI != null) {
+            messagesAPI.sendRaw(player, message);
+        } else {
+            player.sendMessage(message);
+        }
+    }
+
+    private void broadcastToWaitingArena(Player sender, String message) {
+        if (sender == null || message == null || message.isBlank()) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        PlayerUtil<Player> playerUtil = (PlayerUtil<Player>) ModuleAPI.getPlayerUtil();
+        if (playerUtil == null) {
+            return;
+        }
+        Integer senderArenaId = playerUtil.getPlayerArena(sender);
+        if (senderArenaId == null) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        MessageAPI<Player> messagesAPI = (MessageAPI<Player>) ModuleAPI.getMessagesAPI();
+        for (Player online : org.bukkit.Bukkit.getOnlinePlayers()) {
+            if (online == null || !online.isOnline()) {
+                continue;
+            }
+            Integer onlineArenaId = playerUtil.getPlayerArena(online);
+            if (!senderArenaId.equals(onlineArenaId)) {
+                continue;
+            }
+            if (messagesAPI != null) {
+                messagesAPI.sendRaw(online, message);
+            } else {
+                online.sendMessage(message);
+            }
+        }
+    }
+
+    private boolean isPlayerInWaitingArena(Player player) {
+        @SuppressWarnings("unchecked")
+        PlayerUtil<Player> playerUtil = (PlayerUtil<Player>) ModuleAPI.getPlayerUtil();
+        return playerUtil != null && playerUtil.isInWaitingArena(player);
+    }
+
+    private void broadcastResultForCategory(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context,
+                                            VoteState voteState,
+                                            VoteCategory category,
+                                            String messagePath) {
+        String option = voteState.resolveWinner(category);
+        String sourceKey = voteState.hasVotes(category)
+                ? "votes.messages.selected.sources.popular"
+                : "votes.messages.selected.sources.default";
+        String source = moduleConfig.getStringFrom("language.yml", sourceKey, "");
+        String message = moduleConfig.getStringFrom("language.yml", messagePath, "");
+        if (message == null || message.isBlank()) {
+            return;
+        }
+        message = message.replace("{option}", getOptionLabel(category, option).toUpperCase(Locale.ROOT))
+                .replace("{source}", source);
+        MessageAPI<Player> messagesAPI = context.getMessagesAPI();
+        for (Player player : context.getPlayers()) {
+            if (player != null) {
+                messagesAPI.sendRaw(player, message);
+            }
+        }
+    }
+
+    private String mapMenuId(String menuId) {
+        if (menuId == null) {
+            return MENU_MAIN;
+        }
+        return switch (menuId.toLowerCase(Locale.ROOT)) {
+            case "hearts" -> MENU_HEARTS;
+            case "time" -> MENU_TIME;
+            case "weather" -> MENU_WEATHER;
+            default -> MENU_MAIN;
+        };
+    }
+
+    private boolean isOptionValid(VoteCategory category, String option) {
+        return switch (category) {
+            case HEARTS -> HEART_OPTIONS.contains(option);
+            case TIME -> TIME_OPTIONS.contains(option);
+            case WEATHER -> WEATHER_OPTIONS.contains(option);
+        };
+    }
+
+    private boolean hasVotePermission(Player player, VoteCategory category, String option) {
+        if (player == null || category == null || option == null) {
+            return false;
+        }
+        String categoryId = category.getId();
+        return player.hasPermission(VOTE_PERMISSION_BASE + ".*")
+                || player.hasPermission(VOTE_PERMISSION_BASE + "." + categoryId + ".*")
+                || player.hasPermission(VOTE_PERMISSION_BASE + "." + categoryId + "." + option);
+    }
+
+    private String normalizeOption(String value, Set<String> options, String fallback) {
+        String normalized = value == null ? fallback : value.trim().toLowerCase(Locale.ROOT);
+        return options.contains(normalized) ? normalized : fallback;
+    }
+
+    private int resolveHearts(String hearts) {
+        return switch (hearts == null ? "" : hearts) {
+            case "20" -> 20;
+            case "30" -> 30;
+            default -> 10;
+        };
+    }
+
+    private void applyHearts(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context, int hearts) {
+        double maxHealth = Math.max(2.0, hearts * 2.0);
+        Attribute attribute = maxHealthAttribute();
+        for (Player player : context.getPlayers()) {
+            if (player == null) {
+                continue;
+            }
+            if (attribute != null && player.getAttribute(attribute) != null) {
+                player.getAttribute(attribute).setBaseValue(maxHealth);
+            }
+            player.setHealth(Math.min(maxHealth, player.getMaxHealth()));
+        }
+    }
+
+    private void applyWorldTime(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context, String time) {
+        World world = resolveRuntimeWorld(context);
+        if (world == null) {
+            return;
+        }
+        long ticks = switch (time == null ? "" : time) {
+            case "night" -> 13000L;
+            case "sunset" -> 12000L;
+            case "sunrise" -> 23000L;
+            default -> 1000L;
+        };
+        world.setTime(ticks);
+    }
+
+    private void applyWeather(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context, String weather) {
+        World world = resolveRuntimeWorld(context);
+        if (world == null) {
+            return;
+        }
+        boolean rainy = "rainy".equalsIgnoreCase(weather);
+        world.setStorm(rainy);
+        world.setThundering(false);
+        world.setWeatherDuration(rainy ? 20 * 60 * 20 : 0);
+        world.setThunderDuration(0);
+    }
+
+    private World resolveRuntimeWorld(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context) {
+        if (context == null) {
+            return null;
+        }
+
+        ArenaAPI<Location, World> arenaAPI = context.getArenaAPI();
+        if (arenaAPI != null && arenaAPI.getWorld() != null) {
+            return arenaAPI.getWorld();
+        }
+
+        String configuredWorldName = context.getDataAccess() != null
+                ? context.getDataAccess().getGameData("basic.world", String.class)
+                : null;
+        if (configuredWorldName != null && !configuredWorldName.isBlank()) {
+            World configuredWorld = Bukkit.getWorld(configuredWorldName);
+            if (configuredWorld != null) {
+                return configuredWorld;
+            }
+        }
+
+        for (Player player : context.getPlayers()) {
+            if (player != null && player.getWorld() != null) {
+                return player.getWorld();
+            }
+        }
+
+        return null;
+    }
+
+    private String resolveWinningLabel(VoteState voteState, VoteCategory category, Set<String> options) {
+        String resolved = voteState != null ? voteState.resolveWinner(category) : null;
+        if (resolved == null || !options.contains(resolved)) {
+            resolved = defaultOption(category);
+        }
+        return getOptionLabel(category, resolved);
+    }
+
+    private String resolvePlayerVoteLabel(Player player, VoteState voteState, VoteCategory category) {
+        if (player == null || voteState == null) {
+            return "-";
+        }
+        String vote = voteState.getPlayerVote(player.getUniqueId(), category);
+        String label = vote == null ? null : getOptionLabel(category, vote);
+        return label == null || label.isBlank() ? "-" : label;
+    }
+
+    private String defaultOption(VoteCategory category) {
+        return switch (category) {
+            case HEARTS -> normalizeOption(moduleConfig.getString("votes.defaults.hearts", "10"), HEART_OPTIONS, "10");
+            case TIME -> normalizeOption(moduleConfig.getString("votes.defaults.time", "day"), TIME_OPTIONS, "day");
+            case WEATHER -> normalizeOption(moduleConfig.getString("votes.defaults.weather", "sunny"), WEATHER_OPTIONS, "sunny");
+        };
+    }
+
+    private String getCategoryLabel(VoteCategory category) {
+        String label = category == null ? null : moduleConfig.getStringFrom("language.yml", "votes.labels.categories." + category.getId());
+        return label == null ? "" : label;
+    }
+
+    private String getOptionLabel(VoteCategory category, String option) {
+        String label = category == null || option == null ? null : moduleConfig.getStringFrom("language.yml", "votes.labels.options." + category.getId() + "." + option);
+        return label == null ? "" : label;
+    }
+
+    private Attribute maxHealthAttribute() {
+        Attribute attribute = attributeConstant("MAX_HEALTH");
+        return attribute != null ? attribute : attributeConstant("GENERIC_MAX_HEALTH");
+    }
+
+    private Attribute attributeConstant(String fieldName) {
+        try {
+            Object value = Attribute.class.getField(fieldName).get(null);
+            return value instanceof Attribute attribute ? attribute : null;
+        } catch (ReflectiveOperationException ignored) {
+            return null;
+        }
+    }
+
+    private record VoteOption(VoteCategory category, String option) {
+    }
+}

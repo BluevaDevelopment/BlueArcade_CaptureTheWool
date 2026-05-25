@@ -1,13 +1,13 @@
-file_version: 1
-menuName: '<red>Vote hearts</red>'
-menuSize: 27
+file_version: 2
+menu_name: '<red>Vote hearts</red>'
+menu_size: 27
 type: CHEST
 
 items:
   hearts_10:
     slot: 10
     name: '<white>10 hearts</white>'
-    itemStack:
+    item_stack:
       material: REDSTONE
       amount: 1
     lore:
@@ -20,7 +20,7 @@ items:
   hearts_20:
     slot: 13
     name: '<yellow>20 hearts</yellow>'
-    itemStack:
+    item_stack:
       material: GOLDEN_APPLE
       amount: 1
     lore:
@@ -33,7 +33,7 @@ items:
   hearts_30:
     slot: 16
     name: '<light_purple>30 hearts</light_purple>'
-    itemStack:
+    item_stack:
       material: ENCHANTED_GOLDEN_APPLE
       amount: 1
     lore:
@@ -46,7 +46,7 @@ items:
   back:
     slot: 22
     name: '<gray>Back</gray>'
-    itemStack:
+    item_stack:
       material: ARROW
       amount: 1
     lore:

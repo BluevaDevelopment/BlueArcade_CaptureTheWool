@@ -1,13 +1,13 @@
-file_version: 1
-menuName: '<aqua>Capture The Wool vote settings</aqua>'
-menuSize: 27
+file_version: 3
+menu_name: '<aqua>Capture The Wool vote settings</aqua>'
+menu_size: 27
 type: CHEST
 
 items:
   info:
     slot: 4
     name: '<yellow>Match settings</yellow>'
-    itemStack:
+    item_stack:
       material: BOOK
       amount: 1
     lore:
@@ -15,22 +15,10 @@ items:
       - '<gray>Your votes are shared with everyone.</gray>'
     actions: []
 
-  chests:
-    slot: 10
-    name: '<gold>Chest loot</gold>'
-    itemStack:
-      material: CHEST
-      amount: 1
-    lore:
-      - '<gray>Your vote:</gray> <white>{player_vote_chests}</white>'
-      - '<green>Click to vote</green>'
-    actions:
-      - 'OPEN;capture_the_wool_vote_chests'
-
   hearts:
-    slot: 12
+    slot: 11
     name: '<red>Hearts</red>'
-    itemStack:
+    item_stack:
       material: APPLE
       amount: 1
     lore:
@@ -40,9 +28,9 @@ items:
       - 'OPEN;capture_the_wool_vote_hearts'
 
   time:
-    slot: 14
+    slot: 13
     name: '<yellow>Time of day</yellow>'
-    itemStack:
+    item_stack:
       material: CLOCK
       amount: 1
     lore:
@@ -52,9 +40,9 @@ items:
       - 'OPEN;capture_the_wool_vote_time'
 
   weather:
-    slot: 16
+    slot: 15
     name: '<blue>Weather</blue>'
-    itemStack:
+    item_stack:
       material: WATER_BUCKET
       amount: 1
     lore:
@@ -66,7 +54,7 @@ items:
   close:
     slot: 22
     name: '<red>Close</red>'
-    itemStack:
+    item_stack:
       material: BARRIER
       amount: 1
     lore:

@@ -1,13 +1,13 @@
-file_version: 1
-menuName: '<blue>Vote weather</blue>'
-menuSize: 27
+file_version: 2
+menu_name: '<blue>Vote weather</blue>'
+menu_size: 27
 type: CHEST
 
 items:
   sunny:
     slot: 11
     name: '<yellow>Sunny</yellow>'
-    itemStack:
+    item_stack:
       material: SUNFLOWER
       amount: 1
     lore:
@@ -20,7 +20,7 @@ items:
   rainy:
     slot: 15
     name: '<blue>Rainy</blue>'
-    itemStack:
+    item_stack:
       material: WATER_BUCKET
       amount: 1
     lore:
@@ -33,7 +33,7 @@ items:
   back:
     slot: 22
     name: '<gray>Back</gray>'
-    itemStack:
+    item_stack:
       material: ARROW
       amount: 1
     lore:

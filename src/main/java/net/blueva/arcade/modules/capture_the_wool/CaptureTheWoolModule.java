@@ -13,9 +13,14 @@ import net.blueva.arcade.api.setup.SetupRequirement;
 import net.blueva.arcade.api.stats.StatDefinition;
 import net.blueva.arcade.api.stats.StatScope;
 import net.blueva.arcade.api.stats.StatsAPI;
+import net.blueva.arcade.api.ui.ItemAPI;
+import net.blueva.arcade.api.ui.MenuAPI;
+import net.blueva.arcade.api.ui.VoteMenuAPI;
 import net.blueva.arcade.modules.capture_the_wool.game.CaptureTheWoolGame;
 import net.blueva.arcade.modules.capture_the_wool.listener.CaptureTheWoolListener;
+import net.blueva.arcade.modules.capture_the_wool.listener.CaptureTheWoolVoteListener;
 import net.blueva.arcade.modules.capture_the_wool.setup.CaptureTheWoolSetup;
+import net.blueva.arcade.modules.capture_the_wool.support.vote.CaptureTheWoolVoteService;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -36,6 +41,8 @@ public class CaptureTheWoolModule implements GameModule<Player, Location, World,
     private CoreConfigAPI coreConfig;
     private ModuleInfo moduleInfo;
     private StatsAPI statsAPI;
+    private MenuAPI<Player, Material> menuAPI;
+    private ItemAPI<Player, ItemStack, Material> itemAPI;
     private CaptureTheWoolGame game;
 
     @Override
@@ -48,13 +55,32 @@ public class CaptureTheWoolModule implements GameModule<Player, Location, World,
         moduleConfig = ModuleAPI.getModuleConfig(moduleInfo.getId());
         coreConfig = ModuleAPI.getCoreConfig();
         statsAPI = ModuleAPI.getStatsAPI();
+        menuAPI = ModuleAPI.getMenuAPI();
+        @SuppressWarnings("unchecked")
+        ItemAPI<Player, ItemStack, Material> resolvedItemAPI = (ItemAPI<Player, ItemStack, Material>) ModuleAPI.getItemAPI();
+        itemAPI = resolvedItemAPI;
 
         registerConfigs();
         registerStats();
         registerAchievements();
 
-        game = new CaptureTheWoolGame(moduleInfo, moduleConfig, coreConfig, statsAPI);
+        CaptureTheWoolVoteService voteService = new CaptureTheWoolVoteService(moduleConfig, menuAPI, itemAPI, moduleInfo.getId());
+        game = new CaptureTheWoolGame(moduleInfo, moduleConfig, coreConfig, statsAPI, voteService);
+        voteService.setGame(game);
+        registerMenuActions();
+        voteService.registerWaitingItem();
+        voteService.registerClickHandler(game);
         ModuleAPI.getSetupAPI().registerHandler(moduleInfo.getId(), new CaptureTheWoolSetup(this));
+
+        VoteMenuAPI voteMenu = ModuleAPI.getVoteMenuAPI();
+        if (voteMenu != null) {
+            voteMenu.registerGame(
+                    moduleInfo.getId(),
+                    Material.valueOf(moduleConfig.getString("menus.vote.item")),
+                    moduleConfig.getStringFrom("language.yml", "vote_menu.name"),
+                    moduleConfig.getStringListFrom("language.yml", "vote_menu.lore")
+            );
+        }
     }
 
     @Override
@@ -104,11 +130,20 @@ public class CaptureTheWoolModule implements GameModule<Player, Location, World,
         if (game != null) {
             game.shutdown();
         }
+        if (menuAPI != null && moduleInfo != null) {
+            menuAPI.unregisterModuleMenuAPI(moduleInfo.getId());
+            menuAPI.unregisterModuleMenuAPI("capture");
+        }
+        if (itemAPI != null) {
+            itemAPI.unregisterWaitingItem("capture_the_wool_vote_settings");
+            itemAPI.unregisterClickHandler("capture_the_wool_vote_settings");
+        }
     }
 
     @Override
     public void registerEvents(CustomEventRegistry<Listener, EventPriority> registry) {
         registry.register(new CaptureTheWoolListener(game));
+        registry.register(new CaptureTheWoolVoteListener(game));
     }
 
     @Override
@@ -129,9 +164,30 @@ public class CaptureTheWoolModule implements GameModule<Player, Location, World,
     }
 
     private void registerConfigs() {
-        moduleConfig.register("language.yml", 1);
-        moduleConfig.register("settings.yml", 1);
+        moduleConfig.register("language.yml", 4);
+        moduleConfig.register("settings.yml", 2);
         moduleConfig.register("achievements.yml", 1);
+        moduleConfig.register("menus/java/capture_the_wool_vote_main.yml", 3);
+        moduleConfig.register("menus/java/capture_the_wool_vote_hearts.yml", 2);
+        moduleConfig.register("menus/java/capture_the_wool_vote_time.yml", 2);
+        moduleConfig.register("menus/java/capture_the_wool_vote_weather.yml", 2);
+        moduleConfig.register("menus/bedrock/capture_the_wool_vote_main.yml", 2);
+        moduleConfig.register("menus/bedrock/capture_the_wool_vote_hearts.yml", 1);
+        moduleConfig.register("menus/bedrock/capture_the_wool_vote_time.yml", 1);
+        moduleConfig.register("menus/bedrock/capture_the_wool_vote_weather.yml", 1);
+    }
+
+    private void registerMenuActions() {
+        if (menuAPI == null) {
+            return;
+        }
+        menuAPI.registerModuleActionHandler(moduleInfo.getId(), (player, payload) -> {
+            if (payload == null || payload.isBlank()) {
+                return false;
+            }
+            String[] args = payload.trim().split("\\s+");
+            return game.handleVoteCommand(player, args);
+        });
     }
 
     private void registerStats() {

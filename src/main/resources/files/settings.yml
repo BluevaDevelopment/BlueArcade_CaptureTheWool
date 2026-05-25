@@ -1,11 +1,26 @@
 # Capture The Wool Module Settings
 
-file_version: 1
+file_version: 2
 
 # Visual representation in menus
 menus:
   vote:
     item: WHITE_WOOL
+
+waiting_items:
+  vote_settings:
+    enabled: true
+    material: NAME_TAG
+    slot: 1
+    display_name: "<aqua>Vote match settings</aqua>"
+    lore:
+      - "<gray>Choose hearts, time, and weather.</gray>"
+
+votes:
+  defaults:
+    hearts: "10"
+    time: day
+    weather: sunny
 
 teams:
   # Minimum amount of teams required to start the match

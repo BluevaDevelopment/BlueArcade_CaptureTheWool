@@ -15,6 +15,7 @@ import net.blueva.arcade.modules.capture_the_wool.support.armory.ArmoryService;
 import net.blueva.arcade.modules.capture_the_wool.support.combat.CombatService;
 import net.blueva.arcade.modules.capture_the_wool.support.loadout.PlayerLoadoutService;
 import net.blueva.arcade.modules.capture_the_wool.support.outcome.OutcomeService;
+import net.blueva.arcade.modules.capture_the_wool.support.vote.CaptureTheWoolVoteService;
 import net.blueva.arcade.modules.capture_the_wool.support.wool.WoolDefinition;
 import net.blueva.arcade.modules.capture_the_wool.support.wool.WoolService;
 import org.bukkit.GameMode;
@@ -55,15 +56,18 @@ public class CaptureTheWoolGame {
     private final CombatService combatService;
     private final WoolService woolService;
     private final ArmoryService armoryService;
+    private final CaptureTheWoolVoteService voteService;
 
     public CaptureTheWoolGame(ModuleInfo moduleInfo,
                        ModuleConfigAPI moduleConfig,
                        CoreConfigAPI coreConfig,
-                       StatsAPI statsAPI) {
+                       StatsAPI statsAPI,
+                       CaptureTheWoolVoteService voteService) {
         this.moduleInfo = moduleInfo;
         this.moduleConfig = moduleConfig;
         this.coreConfig = coreConfig;
         this.statsAPI = statsAPI;
+        this.voteService = voteService;
         this.descriptionService = new DescriptionService(moduleConfig);
         this.loadoutService = new PlayerLoadoutService(moduleConfig);
         this.placeholderService = new PlaceholderService(moduleConfig, this);
@@ -82,6 +86,11 @@ public class CaptureTheWoolGame {
 
         context.getSchedulerAPI().cancelArenaTasks(arenaId);
         ArenaState state = new ArenaState(context);
+        state.setVoteState(voteService != null ? voteService.createVoteState() : null);
+        if (voteService != null) {
+            voteService.applyPendingVotes(state, context.getPlayers());
+        }
+        applyVoteDefaults(state);
         arenas.put(arenaId, state);
 
         List<WoolDefinition> woolDefs = woolService.loadWoolDefinitions(context);
@@ -101,6 +110,12 @@ public class CaptureTheWoolGame {
         }
 
         descriptionService.sendDescription(context);
+    }
+
+    private void applyVoteDefaults(ArenaState state) {
+        state.setSelectedHearts(moduleConfig.getInt("votes.defaults.hearts", 10));
+        state.setSelectedTime(moduleConfig.getString("votes.defaults.time", "day"));
+        state.setSelectedWeather(moduleConfig.getString("votes.defaults.weather", "sunny"));
     }
 
     private void loadTeamSpawns(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context,
@@ -264,6 +279,11 @@ public class CaptureTheWoolGame {
             registerFallProtection(state, player);
             context.getScoreboardAPI().showScoreboard(player, getScoreboardPath(context));
         }
+
+        if (voteService != null) {
+            voteService.applyVotes(context, state);
+            voteService.broadcastVoteResults(context, state);
+        }
     }
 
     public void finishGame(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context) {
@@ -331,6 +351,24 @@ public class CaptureTheWoolGame {
         }
         ArenaState state = arenas.get(arenaId);
         return state != null ? state.getContext() : null;
+    }
+
+    public boolean handleVoteCommand(Player player, String[] args) {
+        if (voteService == null || player == null) {
+            return false;
+        }
+
+        GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context = getContext(player);
+        ArenaState state = context != null ? getArenaState(context) : null;
+        if (context == null || state == null) {
+            return voteService.handleVoteCommandWithoutContext(player, args);
+        }
+
+        GamePhase phase = context.getPhase();
+        if (phase == GamePhase.PLAYING || phase == GamePhase.ENDING || phase == GamePhase.FINISHED) {
+            return false;
+        }
+        return voteService.handleVoteCommand(player, context, state, args != null ? args : new String[0]);
     }
 
     public ArenaState getArenaState(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context) {

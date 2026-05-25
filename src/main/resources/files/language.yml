@@ -1,4 +1,4 @@
-file_version: 2
+file_version: 4
 display_name: "Capture The Wool"
 
 description:
@@ -22,15 +22,10 @@ vote_menu:
 votes:
   labels:
     categories:
-      chests: "Chest loot"
       hearts: "Hearts"
       time: "Time"
       weather: "Weather"
     options:
-      chests:
-        basic: "Basic"
-        normal: "Normal"
-        overpowered: "Overpowered"
       hearts:
         "10": "10 hearts"
         "20": "20 hearts"
@@ -44,12 +39,11 @@ votes:
         sunny: "Sunny"
         rainy: "Rainy"
   messages:
-    broadcast: "<yellow>{player}</yellow> <gray>picked</gray> <aqua>{category}</aqua> <dark_gray>→</dark_gray> <white>{option}</white>"
+    broadcast: "<yellow>{player}</yellow> <gray>picked</gray> <aqua>{category}</aqua> <dark_gray>→</dark_gray> <white>{option}</white> <yellow>({votes} votes)</yellow>"
     selected:
       sources:
         popular: "by popular vote"
         default: "by default"
-      chests: "<gray>Selected</gray> <gold>{option}</gold> <gray>chest loot {source}.</gray>"
       hearts: "<gray>Selected</gray> <red>{option}</red> <gray>{source}.</gray>"
       time: "<gray>Selected</gray> <yellow>{option}</yellow> <gray>time {source}.</gray>"
       weather: "<gray>Selected</gray> <blue>{option}</blue> <gray>weather {source}.</gray>"

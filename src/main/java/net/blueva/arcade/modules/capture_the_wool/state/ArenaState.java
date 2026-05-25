@@ -60,10 +60,10 @@ public class ArenaState {
     private boolean stormActive;
     private int matchSeconds;
 
-    private String selectedChestTier = "normal";
     private int selectedHearts = 10;
     private String selectedTime = "day";
     private String selectedWeather = "sunny";
+    private VoteState voteState;
 
     private WorldBorder stormBorder;
 
@@ -231,16 +231,6 @@ public class ArenaState {
         return matchSeconds;
     }
 
-    public String getSelectedChestTier() {
-        return selectedChestTier;
-    }
-
-    public void setSelectedChestTier(String selectedChestTier) {
-        if (selectedChestTier != null) {
-            this.selectedChestTier = selectedChestTier;
-        }
-    }
-
     public int getSelectedHearts() {
         return selectedHearts;
     }
@@ -269,6 +259,14 @@ public class ArenaState {
         if (selectedWeather != null) {
             this.selectedWeather = selectedWeather;
         }
+    }
+
+    public VoteState getVoteState() {
+        return voteState;
+    }
+
+    public void setVoteState(VoteState voteState) {
+        this.voteState = voteState;
     }
 
     public void setFallProtection(UUID playerId, long untilMillis) {

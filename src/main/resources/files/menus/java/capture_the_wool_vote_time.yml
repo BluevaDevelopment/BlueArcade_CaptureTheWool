@@ -1,13 +1,13 @@
-file_version: 1
-menuName: '<yellow>Vote time</yellow>'
-menuSize: 27
+file_version: 2
+menu_name: '<yellow>Vote time</yellow>'
+menu_size: 27
 type: CHEST
 
 items:
   day:
     slot: 10
     name: '<yellow>Day</yellow>'
-    itemStack:
+    item_stack:
       material: SUNFLOWER
       amount: 1
     lore:
@@ -20,7 +20,7 @@ items:
   sunset:
     slot: 12
     name: '<gold>Sunset</gold>'
-    itemStack:
+    item_stack:
       material: ORANGE_DYE
       amount: 1
     lore:
@@ -33,7 +33,7 @@ items:
   night:
     slot: 14
     name: '<blue>Night</blue>'
-    itemStack:
+    item_stack:
       material: END_ROD
       amount: 1
     lore:
@@ -46,7 +46,7 @@ items:
   sunrise:
     slot: 16
     name: '<yellow>Sunrise</yellow>'
-    itemStack:
+    item_stack:
       material: YELLOW_DYE
       amount: 1
     lore:
@@ -59,7 +59,7 @@ items:
   back:
     slot: 22
     name: '<gray>Back</gray>'
-    itemStack:
+    item_stack:
       material: ARROW
       amount: 1
     lore:
