@@ -27,6 +27,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class CaptureTheWoolListener implements Listener {
@@ -289,6 +290,11 @@ public class CaptureTheWoolListener implements Listener {
 
         event.setCancelled(true);
         game.handleNonCombatDeath(context, target);
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        game.onPlayerQuit(event.getPlayer());
     }
 
     private Player resolveAttacker(Entity damager) {

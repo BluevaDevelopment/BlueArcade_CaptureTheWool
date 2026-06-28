@@ -4,6 +4,7 @@ import net.blueva.arcade.modules.capture_the_wool.support.vote.VoteCategory;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -77,6 +78,10 @@ public class VoteState {
     public void clearAll() {
         playerVotes.clear();
         votes.clear();
+    }
+
+    public Set<UUID> getVoterIds() {
+        return Set.copyOf(playerVotes.keySet());
     }
 
     public boolean hasVotes(VoteCategory category) {
