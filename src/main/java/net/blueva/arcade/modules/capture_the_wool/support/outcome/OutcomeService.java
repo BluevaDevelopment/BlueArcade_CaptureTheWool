@@ -263,7 +263,7 @@ public class OutcomeService {
     }
 
     private String getWinnerBoardText(String path) {
-        return placeholderService.getModuleConfig().getStringFrom("language.yml", path);
+        return placeholderService.getModuleConfig().getTranslation(null, path);
     }
 
     private String formatCapturedEntry(String woolColor, String playerName) {
@@ -346,7 +346,7 @@ public class OutcomeService {
     private String resolvePlayerName(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context,
                                      UUID playerId) {
         if (playerId == null) {
-            return placeholderService.getModuleConfig().getStringFrom("language.yml", "messages.winner_board.unknown_player");
+            return placeholderService.getModuleConfig().getTranslation(null, "messages.winner_board.unknown_player");
         }
 
         for (Player player : context.getPlayers()) {
@@ -360,7 +360,7 @@ public class OutcomeService {
             return offlinePlayer.getName();
         }
 
-        return placeholderService.getModuleConfig().getStringFrom("language.yml", "messages.winner_board.unknown_player");
+        return placeholderService.getModuleConfig().getTranslation(null, "messages.winner_board.unknown_player");
     }
 
     private int compareWoolIds(String first, String second) {

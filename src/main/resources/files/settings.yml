@@ -1,16 +1,22 @@
-# Capture The Wool Module Settings
+#  ____  _               _                      _
+# | __ )| |_   _  ___   / \   _ __ ___ __ _  __| | ___
+# |  _ \| | | | |/ _ \ / _ \ | '__/ __/ _` |/ _` |/ _ \
+# | |_) | | |_| |  __// ___ \| | | (_| (_| | (_| |  __/
+# |____/|_|\__,_|\___/_/   \_|_|  \___\__,_|\__,_|\___|
+#
+# [!] Arcade by Blueva | https://blueva.net/store/blue-arcade [!]
 
-file_version: 2
+# Capture The Wool Module Settings
 
 # Visual representation in menus
 menus:
   vote:
-    item: WHITE_WOOL
+    item: "WHITE_WOOL"
 
 waiting_items:
   vote_settings:
     enabled: true
-    material: NAME_TAG
+    material: "NAME_TAG"
     slot: 1
     display_name: "<aqua>Vote match settings</aqua>"
     lore:
@@ -19,8 +25,8 @@ waiting_items:
 votes:
   defaults:
     hearts: "10"
-    time: day
-    weather: sunny
+    time: "day"
+    weather: "sunny"
 
 teams:
   # Minimum amount of teams required to start the match
@@ -49,7 +55,7 @@ block_rules:
 
 wools:
   # Material used when a wool location does not define its own block
-  default_material: WHITE_WOOL
+  default_material: "WHITE_WOOL"
   # Update interval (ticks) for the carried wool hologram
   carrier_hologram_update_ticks: 2
 

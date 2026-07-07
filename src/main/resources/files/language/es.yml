@@ -1,0 +1,245 @@
+#  ____  _               _                      _
+# | __ )| |_   _  ___   / \   _ __ ___ __ _  __| | ___
+# |  _ \| | | | |/ _ \ / _ \ | '__/ __/ _` |/ _` |/ _ \
+# | |_) | | |_| |  __// ___ \| | | (_| (_| | (_| |  __/
+# |____/|_|\__,_|\___/_/   \_|_|  \___\__,_|\__,_|\___|
+#
+# [!] Arcade by Blueva | https://blueva.net/store/blue-arcade [!]
+
+# Captura la lana Module - Spanish (ES)
+# Module-specific Spanish translations
+
+display_name: "Captura la lana"
+
+description:
+  - "<dark_gray><strikethrough>----------------------------------------------</strikethrough></dark_gray>"
+  - "<green>Juego</green> <gray>-</gray> <yellow><bold>Captura la lana</bold></yellow>"
+  - " "
+  - "<white>Descripción:</white>"
+  - "<gray>Roba lanas enemigas de su base y llévalas de vuelta a la tuya.</gray>"
+  - "<gray>¡Colabora con tu equipo para capturar todas las lanas primero!</gray>"
+  - " "
+  - "<dark_gray><strikethrough>----------------------------------------------</strikethrough></dark_gray>"
+
+vote_menu:
+  name: "<green>Captura la lana</green>"
+  lore:
+    - "<gray>Captura lanas enemigas y llévalas a tu base.</gray>"
+    - "<gray>¡Saquea, lucha y captura todas las lanas para ganar!</gray>"
+    - ""
+    - "<white>{votes}</white> <gray>votos.</gray>"
+
+votes:
+  labels:
+    categories:
+      hearts: "Corazones"
+      time: "Tiempo"
+      weather: "Clima"
+    options:
+      hearts:
+        '10': "10 corazones"
+        '20': "20 corazones"
+        '30': "30 corazones"
+      time:
+        day: "Día"
+        night: "Noche"
+        sunset: "Atardecer"
+        sunrise: "Amanecer"
+      weather:
+        sunny: "Soleado"
+        rainy: "Lluvioso"
+  messages:
+    broadcast: "<yellow>{player}</yellow> <gray>eligió</gray> <aqua>{category}</aqua> <dark_gray>→</dark_gray> <white>{option}</white> <yellow>({votes} votos)</yellow>"
+    selected:
+      sources:
+        popular: "por votación popular"
+        default: "por defecto"
+      hearts: "<gray>Seleccionado</gray> <red>{option}</red> <gray>{source}.</gray>"
+      time: "<gray>Seleccionado</gray> <yellow>{option}</yellow> <gray>hora {source}.</gray>"
+      weather: "<gray>Seleccionado</gray> <blue>{option}</blue> <gray>clima {source}.</gray>"
+    invalid: "<red>Esa opción de voto no está disponible.</red>"
+    not_available: "<red>Solo puedes votar mientras esperas a que empiece la partida.</red>"
+    no_permission: "<red>No tienes permiso para votar por</red> <yellow>{option}</yellow><red>.</red>"
+
+stats:
+  descriptions:
+    wins: "CaptureTheWool victorias"
+    games_played: "CaptureTheWool partidas jugadas"
+    kills: "Rivales eliminados en CaptureTheWool"
+    chests_looted: "Cofres abiertos en Captura la lana"
+    deaths: "Veces eliminado en CaptureTheWool"
+    wools_stolen: "Lanas enemigas recogidas en Captura la lana"
+    wools_captured: "Lanas objetivo capturadas en Captura la lana"
+  labels:
+    kills: "Eliminaciones"
+    games_played: "Partidas jugadas en Captura la lana"
+    wins: "Victorias en Captura la lana"
+    chests_looted: "Cofres saqueados"
+    deaths: "Muertes"
+    wools_stolen: "Lanas robadas"
+    wools_captured: "Lanas capturadas"
+
+messages:
+  common:
+    boolean_true: "Sí"
+    boolean_false: 'No'
+  eliminated: "<red>¡Has muerto! Reapareciendo...</red>"
+  out_of_bounds: "<yellow>No puedes salir de la arena.</yellow>"
+  restricted_zone: "<red>¡No puedes entrar en esta zona!</red>"
+  winner_board:
+    separator: "<dark_gray><strikethrough>----------------------------------------------</strikethrough></dark_gray>"
+    title: "<white><bold>Lanas capturadas</bold></white>"
+    team_title: "{team}<gray> - Capturas</gray>"
+    missing_text: "No capturada"
+    unknown_player: "Desconocido"
+    line_prefix: "  "
+    entry_gap: "  "
+    entries_per_line: 2
+  action_bar:
+    in_game: "<yellow>{team}</yellow> <dark_gray>•</dark_gray> <white>Lanas:</white> <green>{captured}/{objectives}</green> <dark_gray>•</dark_gray> <white>K:</white> <red>{kills}</red> <white>D:</white> <gray>{deaths}</gray> <dark_gray>•</dark_gray> <white>Llevando:</white> <aqua>{carrying}</aqua>"
+  deaths:
+    killed_by_player:
+      - "<dark_red>✘</dark_red> <red>{victim}</red> <gray>fue eliminado por</gray> <yellow>{killer}</yellow><gray>.</gray>"
+      - "<dark_red>✘</dark_red> <yellow>{killer}</yellow> <gray>superó a</gray> <red>{victim}</red><gray>.</gray>"
+      - "<dark_red>✘</dark_red> <red>{victim}</red> <gray>cayó ante</gray> <yellow>{killer}</yellow><gray>.</gray>"
+      - "<dark_red>✘</dark_red> <yellow>{killer}</yellow> <gray>derrotó a</gray> <red>{victim}</red><gray>.</gray>"
+    generic:
+      - "<dark_red>✘</dark_red> <red>{victim}</red> <gray>no sobrevivió al caos.</gray>"
+      - "<dark_red>✘</dark_red> <red>{victim}</red> <gray>fue eliminado.</gray>"
+  wool:
+    picked_up: "<yellow>{player}</yellow> <gray>recogió una lana del equipo</gray> <aqua>{team}</aqua><gray>!</gray>"
+    captured: "<green><bold>¡LANA CAPTURADA!</bold></green> <yellow>{player}</yellow> <gray>capturó una lana para el equipo</gray> <aqua>{team}</aqua><gray>!</gray>"
+    dropped: "<red>{player}</red> <gray>soltó una lana. Ha vuelto a su punto de aparición.</gray>"
+    cannot_break_own: "<red>Esta lana pertenece a tu equipo. ¡Defiéndela!</red>"
+    cannot_break: "<red>No puedes coger esta lana.</red>"
+    carrier_hologram: "<gold>⬛ LLEVANDO LANA ⬛</gold>"
+    break_hint:
+      title: "<yellow><bold>¡ROMPE ESTA LANA!</bold></yellow>"
+      subtitle: "<gray>Rómpela para llevarla a tu base.</gray>"
+
+titles:
+  you_died:
+    title: "<red><bold>HAS MUERTO</bold></red>"
+    subtitle: "<gray>Reapareciendo...</gray>"
+  classified:
+    title: "<yellow><bold>ELIMINADO</bold></yellow>"
+    subtitle: "<gray>Reapareciendo...</gray>"
+
+scoreboard:
+  team_size_2:
+    title: "<bold><gradient:aqua:light_purple>Blue Arcade</gradient></bold>"
+    lines:
+      - ""
+      - "<white>Arena:</white> <aqua>{arena}</aqua>"
+      - "<white>Juego:</white> <aqua>Captura la lana</aqua>"
+      - ""
+      - "<white>Equipo:</white> <yellow>{team}</yellow>"
+      - "<white>Tus bajas:</white> <red>{kills}</red>"
+      - ""
+      - "{wool_status_team_1}"
+      - "{wool_status_team_2}"
+      - ""
+      - "<yellow>www.blueva.net</yellow>"
+  team_size_3:
+    title: "<bold><gradient:aqua:light_purple>Blue Arcade</gradient></bold>"
+    lines:
+      - ""
+      - "<white>Arena:</white> <aqua>{arena}</aqua>"
+      - "<white>Juego:</white> <aqua>Captura la lana</aqua>"
+      - ""
+      - "<white>Equipo:</white> <yellow>{team}</yellow>"
+      - "<white>Tus bajas:</white> <red>{kills}</red>"
+      - ""
+      - "{wool_status_team_1}"
+      - "{wool_status_team_2}"
+      - "{wool_status_team_3}"
+      - ""
+      - "<yellow>www.blueva.net</yellow>"
+  team_size_4:
+    title: "<bold><gradient:aqua:light_purple>Blue Arcade</gradient></bold>"
+    lines:
+      - ""
+      - "<white>Arena:</white> <aqua>{arena}</aqua>"
+      - "<white>Juego:</white> <aqua>Captura la lana</aqua>"
+      - ""
+      - "<white>Equipo:</white> <yellow>{team}</yellow>"
+      - "<white>Tus bajas:</white> <red>{kills}</red>"
+      - ""
+      - "{wool_status_team_1}"
+      - "{wool_status_team_2}"
+      - "{wool_status_team_3}"
+      - "{wool_status_team_4}"
+      - ""
+      - "<yellow>www.blueva.net</yellow>"
+  final:
+    winner:
+      title: "<bold><gradient:aqua:light_purple>Blue Arcade</gradient></bold>"
+      lines:
+        - ""
+        - "<white>Ganador:</white>"
+        - "<green>{winning_team}</green>"
+        - ""
+        - "<green>➊</green> <white>{top_kills_1}</white> <gray>{top_kills_value_1} bajas</gray>"
+        - "<gold>➋</gold> <white>{top_kills_2}</white> <gray>{top_kills_value_2} bajas</gray>"
+        - "<red>➌</red> <white>{top_kills_3}</white> <gray>{top_kills_value_3} bajas</gray>"
+        - "<dark_gray>➍</dark_gray> <gray>{top_kills_4}</gray> <dark_gray>{top_kills_value_4} bajas</dark_gray>"
+        - "<dark_gray>➎</dark_gray> <gray>{top_kills_5}</gray> <dark_gray>{top_kills_value_5} bajas</dark_gray>"
+        - ""
+        - "<yellow>www.blueva.net</yellow>"
+
+setup_messages:
+  common:
+    boolean_true: "Sí"
+    boolean_false: 'No'
+  team:
+    usage: "{prefix} <red>Uso:</red> <yellow>/baa game <id> capture_the_wool team <count|size> <value></yellow>"
+    success: "{prefix} <green>Equipo {setting} establecido en {value} para {game} en la arena {arena_id}.</green>"
+    invalid_limit: "{prefix} <red>La configuración de equipos supera el máximo de jugadores de la arena ({max_players}).</red>"
+    invalid_value: "{prefix} <red>Equipo {setting} debe ser mayor que 0.</red>"
+    invalid_count: "{prefix} <red>El número de equipos debe ser al menos 2.</red>"
+    invalid_size: "{prefix} <red>El tamaño del equipo debe ser al menos 2.</red>"
+    numeric_ids_only: "{prefix} <red>team_id debe ser numérico y estar dentro del rango configurado: <white>{min}</white> a <white>{max}</white>.</red>"
+  search_chests:
+    missing_bounds: "{prefix} <red>Los límites del juego aún no están configurados.</red>"
+    start: "{prefix} <yellow>Buscando cofres... ({blocks} bloques que escanear)</yellow>"
+    action_bar: "<gold>Buscando cofres</gold> <gray>(Tiempo transcurrido: {time})</gray> <dark_gray>•</dark_gray> <green>{found}</green>"
+    complete: "{prefix} <green>Búsqueda de cofres completada.</green> <yellow>Encontrados {found} cofres en {time}.</yellow>"
+  region:
+    usage: "{prefix} <red>Uso:</red> <yellow>/baa game <id> capture_the_wool region <set|clear></yellow>"
+    must_use_stick: "{prefix} <red>Selecciona primero dos esquinas con la herramienta de setup.</red>"
+    set: "{prefix} <green>Región de regeneración guardada.</green> <gray>Bloques:</gray> <white>{blocks}</white> <gray>({x}x{y}x{z})</gray>"
+    cleared: "{prefix} <yellow>Región de regeneración borrada.</yellow>"
+  wool:
+    usage: "{prefix} <red>Uso:</red> <yellow>/baa game <id> capture_the_wool wool <create|capture|clearcapture|list> ...</yellow>"
+    create_usage: "{prefix} <red>Uso:</red> <yellow>/baa game <id> capture_the_wool wool create <wool_id> <MATERIAL> <owner_team></yellow>"
+    capture_usage: "{prefix} <red>Uso:</red> <yellow>/baa game <id> capture_the_wool wool capture <wool_id> <capture_team></yellow>"
+    clear_capture_usage: "{prefix} <red>Uso:</red> <yellow>/baa game <id> capture_the_wool wool clearcapture <wool_id></yellow>"
+    must_use_stick: "{prefix} <red>Selecciona primero exactamente un bloque con la vara mágica.</red>"
+    single_block_only: "{prefix} <red>Cada objetivo de lana usa exactamente un bloque.</red>"
+    created: "{prefix} <green>Lana <white>{wool}</white> creada. Material: <white>{material}</white>, equipo propietario: <white>{team}</white>.</green>"
+    capture_set: "{prefix} <green>Punto de captura guardado para la lana <white>{wool}</white>. Propietario: <white>{owner_team}</white>, equipos que la pueden robar: <white>{capture_team}</white>.</green>"
+    capture_cleared: "{prefix} <yellow>Configuración de captura borrada para la lana <white>{wool}</white>.</yellow>"
+    list_header: "{prefix} <gold>Lanas configuradas por equipo:</gold>"
+    list_line: "{prefix} <gray>- Equipo <white>{team}</white> | lana <white>{wool}</white> | roba: <white>{capture_team}</white> | material: <white>{material}</white></gray>"
+    list_empty: "{prefix} <yellow>Todavía no hay lanas configuradas.</yellow>"
+    not_found: "{prefix} <red>La lana <white>{wool}</white> no existe. Créala primero.</red>"
+    invalid_team: "{prefix} <red>ID de equipo no válido: <white>{team}</white>.</red>"
+    capture_owner_forbidden: "{prefix} <red>Equipo <white>{team}</white> posee la lana <white>{wool}</white>. El equipo propietario no puede ser el equipo capturador.</red>"
+    invalid_material: "{prefix} <red>Material no válido: {material}. Usa un nombre de material de Bukkit válido (por ejemplo, YELLOW_WOOL).</red>"
+  team_spawn:
+    usage: "{prefix} <red>Uso:</red> <yellow>/baa game <id> capture_the_wool team spawn <team_id></yellow>"
+    usage_remove: "{prefix} <red>Uso:</red> <yellow>/baa game <id> capture_the_wool team spawn remove <team_id></yellow>"
+    teams_not_configured: "{prefix} <red>El número de equipos aún no está configurado. Defínelo primero con <yellow>/baa game <id> capture_the_wool team count <n></yellow>.</red>"
+    set: "{prefix} <green>Aparición de equipo establecida para el equipo <white>{team}</white> en tu ubicación actual.</green>"
+    removed: "{prefix} <yellow>Aparición de equipo eliminada para el equipo <white>{team}</white>.</yellow>"
+  team_zone:
+    usage: "{prefix} <red>Uso:</red> <yellow>/baa game <id> capture_the_wool team zone <create|list|delete> ...</yellow>"
+    create_usage: "{prefix} <red>Uso:</red> <yellow>/baa game <id> capture_the_wool team zone create <team_id></yellow>"
+    delete_usage: "{prefix} <red>Uso:</red> <yellow>/baa game <id> capture_the_wool team zone delete <team_id> <index></yellow>"
+    must_use_stick: "{prefix} <red>Selecciona primero dos esquinas con la herramienta de setup.</red>"
+    set: "{prefix} <green>Zona restringida #{index} establecida para el equipo <white>{team}</white>.</green>"
+    deleted: "{prefix} <yellow>Zona restringida #{index} eliminada para el equipo <white>{team}</white>.</yellow>"
+    not_found: "{prefix} <red>Zona restringida #{index} del equipo <white>{team}</white> no existe.</red>"
+    list_header: "{prefix} <gold>Zonas restringidas por equipo:</gold>"
+    list_line: "{prefix} <gray>- Equipo <white>{team}</white> | zone <white>#{index}</white></gray>"
+    list_empty: "{prefix} <yellow>No restricted zones configurado yet.</yellow>"

@@ -470,7 +470,7 @@ public class CaptureTheWoolVoteService {
     }
 
     private String formatVoteMessage(String path, VoteCategory category, String option) {
-        String message = moduleConfig.getStringFrom("language.yml", path, "");
+        String message = moduleConfig.getTranslation(null, path);
         if (message == null || message.isBlank()) {
             return "";
         }
@@ -516,7 +516,7 @@ public class CaptureTheWoolVoteService {
     }
 
     private String voteBroadcastMessage(Player player, VoteCategory category, String option, VoteState voteState) {
-        String message = moduleConfig.getStringFrom("language.yml", "votes.messages.broadcast", "");
+        String message = moduleConfig.getTranslation(player, "votes.messages.broadcast");
         if (message == null || message.isBlank()) {
             return "";
         }
@@ -582,8 +582,8 @@ public class CaptureTheWoolVoteService {
         String sourceKey = voteState.hasVotes(category)
                 ? "votes.messages.selected.sources.popular"
                 : "votes.messages.selected.sources.default";
-        String source = moduleConfig.getStringFrom("language.yml", sourceKey, "");
-        String message = moduleConfig.getStringFrom("language.yml", messagePath, "");
+        String source = moduleConfig.getTranslation(null, sourceKey);
+        String message = moduleConfig.getTranslation(null, messagePath);
         if (message == null || message.isBlank()) {
             return;
         }
@@ -735,12 +735,12 @@ public class CaptureTheWoolVoteService {
     }
 
     private String getCategoryLabel(VoteCategory category) {
-        String label = category == null ? null : moduleConfig.getStringFrom("language.yml", "votes.labels.categories." + category.getId());
+        String label = category == null ? null : moduleConfig.getTranslation(null, "votes.labels.categories." + category.getId());
         return label == null ? "" : label;
     }
 
     private String getOptionLabel(VoteCategory category, String option) {
-        String label = category == null || option == null ? null : moduleConfig.getStringFrom("language.yml", "votes.labels.options." + category.getId() + "." + option);
+        String label = category == null || option == null ? null : moduleConfig.getTranslation(null, "votes.labels.options." + category.getId() + "." + option);
         return label == null ? "" : label;
     }
 

@@ -59,7 +59,7 @@ public class CaptureTheWoolListener implements Listener {
         if (game.isInRestrictedZone(context, player, event.getTo())) {
             event.setCancelled(true);
             context.getMessagesAPI().sendRaw(player,
-                    game.getModuleConfig().getStringFrom("language.yml", "messages.restricted_zone"));
+                    game.getModuleConfig().getTranslation(player, "messages.restricted_zone"));
             return;
         }
 

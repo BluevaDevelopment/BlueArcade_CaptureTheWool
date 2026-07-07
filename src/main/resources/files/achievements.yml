@@ -1,10 +1,17 @@
-file_version: 1
+#  ____  _               _                      _
+# | __ )| |_   _  ___   / \   _ __ ___ __ _  __| | ___
+# |  _ \| | | | |/ _ \ / _ \ | '__/ __/ _` |/ _` |/ _ \
+# | |_) | | |_| |  __// ___ \| | | (_| (_| | (_| |  __/
+# |____/|_|\__,_|\___/_/   \_|_|  \___\__,_|\__,_|\___|
+#
+# [!] Arcade by Blueva | https://blueva.net/store/blue-arcade [!]
+
 category:
-  id: capture_the_wool
+  id: "capture_the_wool"
   name: "Capture The Wool"
   description:
     - "Achievements tied to Capture The Wool."
-  icon: DRAGON_HEAD
+  icon: "DRAGON_HEAD"
   sort_order: 22
 
 achievements:
@@ -12,7 +19,7 @@ achievements:
     name: "Skybound"
     description:
       - "Play Capture The Wool matches."
-    icon: DRAGON_HEAD
+    icon: "DRAGON_HEAD"
     phases:
       1:
         name: "First flight"
@@ -84,7 +91,7 @@ achievements:
     name: "Eliminator"
     description:
       - "Eliminate opponents."
-    icon: DIAMOND_SWORD
+    icon: "DIAMOND_SWORD"
     phases:
       1:
         name: "Opening strike"
@@ -156,7 +163,7 @@ achievements:
     name: "Loot Runner"
     description:
       - "Loot chests across the island."
-    icon: CHEST
+    icon: "CHEST"
     phases:
       1:
         name: "Quick grab"
@@ -228,7 +235,7 @@ achievements:
     name: "Champion"
     description:
       - "Win Capture The Wool matches."
-    icon: NETHER_STAR
+    icon: "NETHER_STAR"
     phases:
       1:
         name: "First banner"
@@ -300,7 +307,7 @@ achievements:
     name: "Wool Thief"
     description:
       - "Steal enemy objective wools."
-    icon: SHEARS
+    icon: "SHEARS"
     phases:
       1:
         name: "First steal"
@@ -372,7 +379,7 @@ achievements:
     name: "Wool Captain"
     description:
       - "Capture objective wools for your team."
-    icon: WHITE_WOOL
+    icon: "WHITE_WOOL"
     phases:
       1:
         name: "First capture"
@@ -444,7 +451,7 @@ achievements:
     name: "Battle Hardened"
     description:
       - "Keep fighting even after many defeats."
-    icon: TOTEM_OF_UNDYING
+    icon: "TOTEM_OF_UNDYING"
     phases:
       1:
         name: "Bruised"

@@ -223,17 +223,17 @@ public class CaptureTheWoolGame {
                         return;
                     }
                     teleportToTeamSpawn(context, state, player);
-                    player.setGameMode(GameMode.SPECTATOR);
+                    context.setPlayerSpectating(player, true);
                 });
             }
 
             context.getSoundsAPI().play(player, coreConfig.getSound("sounds.starting_game.countdown"));
 
-            String title = coreConfig.getLanguage("titles.starting_game.title")
+            String title = coreConfig.getLanguage(player, "titles.starting_game.title")
                     .replace("{game_display_name}", moduleInfo.getName())
                     .replace("{time}", String.valueOf(secondsLeft));
 
-            String subtitle = coreConfig.getLanguage("titles.starting_game.subtitle")
+            String subtitle = coreConfig.getLanguage(player, "titles.starting_game.subtitle")
                     .replace("{game_display_name}", moduleInfo.getName())
                     .replace("{time}", String.valueOf(secondsLeft));
 
@@ -247,10 +247,10 @@ public class CaptureTheWoolGame {
                 continue;
             }
 
-            String title = coreConfig.getLanguage("titles.game_started.title")
+            String title = coreConfig.getLanguage(player, "titles.game_started.title")
                     .replace("{game_display_name}", moduleInfo.getName());
 
-            String subtitle = coreConfig.getLanguage("titles.game_started.subtitle")
+            String subtitle = coreConfig.getLanguage(player, "titles.game_started.subtitle")
                     .replace("{game_display_name}", moduleInfo.getName());
 
             context.getTitlesAPI().sendRaw(player, title, subtitle, 0, 20, 20);
@@ -825,12 +825,12 @@ public class CaptureTheWoolGame {
                 return;
             }
 
-            String actionBarTemplate = moduleConfig.getStringFrom("language.yml", "messages.action_bar.in_game");
             for (Player player : allPlayers) {
                 if (!player.isOnline()) {
                     continue;
                 }
 
+                String actionBarTemplate = moduleConfig.getTranslation(player, "messages.action_bar.in_game");
                 Map<String, String> customPlaceholders = placeholderService.buildPlaceholders(player);
                 context.getMessagesAPI().sendActionBar(player, actionBarTemplate
                         .replace("{team}", customPlaceholders.getOrDefault("team", "-"))
@@ -838,7 +838,7 @@ public class CaptureTheWoolGame {
                         .replace("{objectives}", customPlaceholders.getOrDefault("team_wools_total", "0"))
                         .replace("{kills}", customPlaceholders.getOrDefault("kills", "0"))
                         .replace("{deaths}", customPlaceholders.getOrDefault("deaths", "0"))
-                        .replace("{carrying}", customPlaceholders.getOrDefault("carrying_wool", moduleConfig.getStringFrom("language.yml", "messages.common.boolean_false")))
+                        .replace("{carrying}", customPlaceholders.getOrDefault("carrying_wool", moduleConfig.getTranslation(player, "messages.common.boolean_false")))
                         .replace("{elapsed}", String.valueOf(state.getMatchSeconds())));
 
                 context.getScoreboardAPI().update(player, getScoreboardPath(context), customPlaceholders);
@@ -937,4 +937,10 @@ public class CaptureTheWoolGame {
             return null;
         }
     }
+
+    private static String formatCountdownTime(int seconds) {
+        int safeSeconds = Math.max(0, seconds);
+        return String.format("%02d:%02d", safeSeconds / 60, safeSeconds % 60);
+    }
+
 }

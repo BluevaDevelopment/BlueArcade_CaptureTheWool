@@ -44,8 +44,8 @@ public class PlaceholderService {
             placeholders.put("alive_teams", String.valueOf(game.getAliveTeamIds(context).size()));
 
             ArenaState state = game.getArenaState(context);
-            String carryingYes = moduleConfig.getStringFrom("language.yml", "messages.common.boolean_true");
-            String carryingNo = moduleConfig.getStringFrom("language.yml", "messages.common.boolean_false");
+            String carryingYes = moduleConfig.getTranslation(player, "messages.common.boolean_true");
+            String carryingNo = moduleConfig.getTranslation(player, "messages.common.boolean_false");
             placeholders.put("carrying_wool", state != null && game.getWoolService().isPlayerCarryingWool(state, player) ? carryingYes : carryingNo);
 
             TeamsAPI<Player, Material> teamsAPI = context.getTeamsAPI();

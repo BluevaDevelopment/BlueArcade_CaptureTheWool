@@ -2,7 +2,7 @@ name: Capture The Wool
 id: capture_the_wool
 version: ${revision}
 type: MINIGAME
-api-version: 3.3
+api-version: 3.4
 main: net.blueva.arcade.modules.capture_the_wool.CaptureTheWoolModule
 
 authors:

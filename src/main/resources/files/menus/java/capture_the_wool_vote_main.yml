@@ -1,14 +1,21 @@
-file_version: 3
+#  ____  _               _                      _
+# | __ )| |_   _  ___   / \   _ __ ___ __ _  __| | ___
+# |  _ \| | | | |/ _ \ / _ \ | '__/ __/ _` |/ _` |/ _ \
+# | |_) | | |_| |  __// ___ \| | | (_| (_| | (_| |  __/
+# |____/|_|\__,_|\___/_/   \_|_|  \___\__,_|\__,_|\___|
+#
+# [!] Arcade by Blueva | https://blueva.net/store/blue-arcade [!]
+
 menu_name: '<aqua>Capture The Wool vote settings</aqua>'
 menu_size: 27
-type: CHEST
+type: "CHEST"
 
 items:
   info:
     slot: 4
     name: '<yellow>Match settings</yellow>'
     item_stack:
-      material: BOOK
+      material: "BOOK"
       amount: 1
     lore:
       - '<gray>Vote for the match setup before it starts.</gray>'
@@ -19,7 +26,7 @@ items:
     slot: 11
     name: '<red>Hearts</red>'
     item_stack:
-      material: APPLE
+      material: "APPLE"
       amount: 1
     lore:
       - '<gray>Your vote:</gray> <white>{player_vote_hearts}</white>'
@@ -31,7 +38,7 @@ items:
     slot: 13
     name: '<yellow>Time of day</yellow>'
     item_stack:
-      material: CLOCK
+      material: "CLOCK"
       amount: 1
     lore:
       - '<gray>Your vote:</gray> <white>{player_vote_time}</white>'
@@ -43,7 +50,7 @@ items:
     slot: 15
     name: '<blue>Weather</blue>'
     item_stack:
-      material: WATER_BUCKET
+      material: "WATER_BUCKET"
       amount: 1
     lore:
       - '<gray>Your vote:</gray> <white>{player_vote_weather}</white>'
@@ -55,7 +62,7 @@ items:
     slot: 22
     name: '<red>Close</red>'
     item_stack:
-      material: BARRIER
+      material: "BARRIER"
       amount: 1
     lore:
       - '<gray>Return to the lobby.</gray>'

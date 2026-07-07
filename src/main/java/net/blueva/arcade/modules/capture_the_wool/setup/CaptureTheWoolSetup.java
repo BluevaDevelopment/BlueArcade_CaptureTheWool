@@ -85,21 +85,21 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
     private boolean handleTeamConfig(SetupContext<Player, CommandSender, Location> context) {
         if (!context.hasHandlerArgs(2)) {
             context.getMessagesAPI().sendRaw(context.getPlayer(),
-                    getSetupMessage("team.usage"));
+                    getSetupMessage(context.getPlayer(), "team.usage"));
             return true;
         }
 
         String setting = context.getHandlerArg(0);
         if (setting == null || (!setting.equalsIgnoreCase("count") && !setting.equalsIgnoreCase("size"))) {
             context.getMessagesAPI().sendRaw(context.getPlayer(),
-                    getSetupMessage("team.usage"));
+                    getSetupMessage(context.getPlayer(), "team.usage"));
             return true;
         }
 
         String valueRaw = context.getHandlerArg(1);
         if (valueRaw == null || !isNumber(valueRaw)) {
             context.getMessagesAPI().sendRaw(context.getPlayer(),
-                    module.getCoreConfig().getLanguage("admin_commands.errors.invalid_number")
+                    module.getCoreConfig().getLanguage(context.getPlayer(), "admin_commands.errors.invalid_number")
                             .replace("{value}", valueRaw == null ? "" : valueRaw));
             return true;
         }
@@ -107,17 +107,17 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
         int value = Integer.parseInt(valueRaw);
         if (value <= 0) {
             context.getMessagesAPI().sendRaw(context.getPlayer(),
-                    getSetupMessage("team.invalid_value")
+                    getSetupMessage(context.getPlayer(), "team.invalid_value")
                             .replace("{setting}", setting));
             return true;
         }
 
         if (setting.equalsIgnoreCase("count") && value < 2) {
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team.invalid_count"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "team.invalid_count"));
             return true;
         }
         if (setting.equalsIgnoreCase("size") && value < 2) {
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team.invalid_size"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "team.invalid_size"));
             return true;
         }
 
@@ -132,7 +132,7 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
         int maxPlayers = context.getData().getArenaInt("arena.basic.max_players", 0);
         if (teamCount > 0 && teamSize > 0 && maxPlayers > 0 && teamCount * teamSize > maxPlayers) {
             context.getMessagesAPI().sendRaw(context.getPlayer(),
-                    getSetupMessage("team.invalid_limit")
+                    getSetupMessage(context.getPlayer(), "team.invalid_limit")
                             .replace("{max_players}", String.valueOf(maxPlayers)));
             return true;
         }
@@ -141,7 +141,7 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
         context.getData().save();
 
         context.getMessagesAPI().sendRaw(context.getPlayer(),
-                getSetupMessage("team.success")
+                getSetupMessage(context.getPlayer(), "team.success")
                         .replace("{game}", context.getGameId())
                         .replace("{arena_id}", String.valueOf(context.getArenaId()))
                         .replace("{setting}", setting.toLowerCase())
@@ -152,13 +152,13 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
 
     private boolean handleWool(SetupContext<Player, CommandSender, Location> context) {
         if (!context.hasHandlerArgs(1)) {
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.usage"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.usage"));
             return true;
         }
 
         String action = context.getHandlerArg(0);
         if (action == null) {
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.usage"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.usage"));
             return true;
         }
 
@@ -168,7 +168,7 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
 
         if ("create".equalsIgnoreCase(action)) {
             if (!context.hasHandlerArgs(4)) {
-                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.create_usage"));
+                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.create_usage"));
                 return true;
             }
             String woolId = normalizeWoolId(context.getHandlerArg(1));
@@ -176,7 +176,7 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
             String ownerTeam = normalizeTeamId(context.getHandlerArg(3));
 
             if (woolId == null || materialName == null || ownerTeam == null) {
-                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.create_usage"));
+                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.create_usage"));
                 sendTeamIdRangeMessage(context);
                 return true;
             }
@@ -190,7 +190,7 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
             try {
                 parsedMaterial = Material.valueOf(materialName.toUpperCase(Locale.ROOT));
             } catch (IllegalArgumentException e) {
-                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.invalid_material")
+                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.invalid_material")
                         .replace("{material}", materialName));
                 return true;
             }
@@ -198,14 +198,14 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
             String basePath = "game.play_area.wools." + woolId;
             Player player = context.getPlayer();
             if (player == null || !context.getSelection().hasCompleteSelection(player)) {
-                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.must_use_stick"));
+                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.must_use_stick"));
                 return true;
             }
 
             Location pos1 = context.getSelection().getPosition1(player);
             Location pos2 = context.getSelection().getPosition2(player);
             if (pos1 == null || pos2 == null || pos1.getBlockX() != pos2.getBlockX() || pos1.getBlockY() != pos2.getBlockY() || pos1.getBlockZ() != pos2.getBlockZ()) {
-                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.single_block_only"));
+                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.single_block_only"));
                 return true;
             }
 
@@ -214,7 +214,7 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
             context.getData().setLocation(basePath + ".spawn", pos1);
             addToRegistry(context, woolId);
             context.getData().save();
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.created")
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.created")
                     .replace("{wool}", woolId)
                     .replace("{material}", parsedMaterial.name())
                     .replace("{team}", ownerTeam));
@@ -223,17 +223,17 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
 
         if ("clearcapture".equalsIgnoreCase(action)) {
             if (!context.hasHandlerArgs(2)) {
-                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.clear_capture_usage"));
+                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.clear_capture_usage"));
                 return true;
             }
             String woolId = normalizeWoolId(context.getHandlerArg(1));
             if (woolId == null) {
-                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.clear_capture_usage"));
+                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.clear_capture_usage"));
                 return true;
             }
             String basePath = "game.play_area.wools." + woolId;
             if (normalizeTeamId(context.getData().getString(basePath + ".owner_team")) == null) {
-                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.not_found")
+                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.not_found")
                         .replace("{wool}", woolId));
                 return true;
             }
@@ -241,25 +241,25 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
             context.getData().remove(basePath + ".capture_teams");
             context.getData().remove(basePath + ".capture");
             context.getData().save();
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.capture_cleared")
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.capture_cleared")
                     .replace("{wool}", woolId));
             return true;
         }
 
         if (!"capture".equalsIgnoreCase(action)) {
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.usage"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.usage"));
             return true;
         }
 
         if (!context.hasHandlerArgs(3)) {
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.capture_usage"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.capture_usage"));
             return true;
         }
 
         String woolId = normalizeWoolId(context.getHandlerArg(1));
         String captureTeam = normalizeTeamId(context.getHandlerArg(2));
         if (woolId == null || captureTeam == null) {
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.capture_usage"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.capture_usage"));
             sendTeamIdRangeMessage(context);
             return true;
         }
@@ -267,7 +267,7 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
         String basePath = "game.play_area.wools." + woolId;
         String ownerTeam = normalizeTeamId(context.getData().getString(basePath + ".owner_team"));
         if (ownerTeam == null) {
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.not_found")
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.not_found")
                     .replace("{wool}", woolId));
             return true;
         }
@@ -278,7 +278,7 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
         }
 
         if (ownerTeam.equalsIgnoreCase(captureTeam)) {
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.capture_owner_forbidden")
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.capture_owner_forbidden")
                     .replace("{wool}", woolId)
                     .replace("{team}", ownerTeam));
             return true;
@@ -286,14 +286,14 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
 
         Player player = context.getPlayer();
         if (player == null || !context.getSelection().hasCompleteSelection(player)) {
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.must_use_stick"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.must_use_stick"));
             return true;
         }
 
         Location pos1 = context.getSelection().getPosition1(player);
         Location pos2 = context.getSelection().getPosition2(player);
         if (pos1 == null || pos2 == null || pos1.getBlockX() != pos2.getBlockX() || pos1.getBlockY() != pos2.getBlockY() || pos1.getBlockZ() != pos2.getBlockZ()) {
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.single_block_only"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.single_block_only"));
             return true;
         }
 
@@ -308,7 +308,7 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
         context.getData().setString(basePath + ".capture_teams", String.join(",", captureTeams));
         context.getData().setLocation(basePath + ".capture", pos1);
         context.getData().save();
-        context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.capture_set")
+        context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.capture_set")
                 .replace("{owner_team}", ownerTeam)
                 .replace("{capture_team}", String.join(",", captureTeams))
                 .replace("{wool}", woolId));
@@ -321,17 +321,17 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
             registryRaw = context.getData().getString("game.wool_registry");
         }
         if (registryRaw == null || registryRaw.isBlank()) {
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.list_empty"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.list_empty"));
             return true;
         }
 
         Set<String> entries = parseRegistry(registryRaw);
         if (entries.isEmpty()) {
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.list_empty"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.list_empty"));
             return true;
         }
 
-        context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("wool.list_header"));
+        context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "wool.list_header"));
         for (String woolId : entries) {
             String basePath = "game.play_area.wools." + woolId;
             String ownerTeam = context.getData().getString(basePath + ".owner_team");
@@ -347,7 +347,7 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
             if (ownerTeam == null || ownerTeam.isBlank()) {
                 continue;
             }
-            String line = getSetupMessage("wool.list_line")
+            String line = getSetupMessage(context.getPlayer(), "wool.list_line")
                     .replace("{team}", ownerTeam)
                     .replace("{wool}", woolId)
                     .replace("{capture_team}", captureTeam == null ? "-" : captureTeam)
@@ -442,8 +442,8 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
 
     private boolean handleTeamSpawn(SetupContext<Player, CommandSender, Location> context) {
         if (!context.hasHandlerArgs(2)) {
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_spawn.usage"));
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_spawn.usage_remove"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "team_spawn.usage"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "team_spawn.usage_remove"));
             return true;
         }
 
@@ -454,8 +454,8 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
 
         String teamId = normalizeTeamId(firstArg);
         if (teamId == null) {
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_spawn.usage"));
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_spawn.usage_remove"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "team_spawn.usage"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "team_spawn.usage_remove"));
             sendTeamIdRangeMessage(context);
             return true;
         }
@@ -475,26 +475,26 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
         context.getData().setLocation(path, location);
         context.getData().save();
 
-        context.getMessagesAPI().sendRaw(player, getSetupMessage("team_spawn.set")
+        context.getMessagesAPI().sendRaw(player, getSetupMessage(context.getPlayer(), "team_spawn.set")
                 .replace("{team}", teamId));
         return true;
     }
 
     private boolean handleTeamSpawnRemove(SetupContext<Player, CommandSender, Location> context) {
         if (!context.hasHandlerArgs(3)) {
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_spawn.usage_remove"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "team_spawn.usage_remove"));
             return true;
         }
 
         int teamCount = context.getData().getInt("teams.count", 0);
         if (teamCount <= 0) {
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_spawn.teams_not_configured"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "team_spawn.teams_not_configured"));
             return true;
         }
 
         String teamId = normalizeTeamId(context.getHandlerArg(2));
         if (teamId == null) {
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_spawn.usage_remove"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "team_spawn.usage_remove"));
             sendTeamIdRangeMessage(context);
             return true;
         }
@@ -508,14 +508,14 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
         context.getData().remove(path);
         context.getData().save();
 
-        context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_spawn.removed")
+        context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "team_spawn.removed")
                 .replace("{team}", teamId));
         return true;
     }
 
     private boolean handleTeamZone(SetupContext<Player, CommandSender, Location> context) {
         if (!context.hasHandlerArgs(2)) {
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_zone.usage"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "team_zone.usage"));
             return true;
         }
 
@@ -528,13 +528,13 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
 
         if ("delete".equals(action)) {
             if (!context.hasHandlerArgs(4)) {
-                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_zone.delete_usage"));
+                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "team_zone.delete_usage"));
                 return true;
             }
             String teamId = normalizeTeamId(context.getHandlerArg(2));
             String indexRaw = context.getHandlerArg(3);
             if (teamId == null || !isNumber(indexRaw)) {
-                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_zone.delete_usage"));
+                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "team_zone.delete_usage"));
                 sendTeamIdRangeMessage(context);
                 return true;
             }
@@ -545,14 +545,14 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
             int index = Integer.parseInt(indexRaw);
             String zonePath = "game.play_area.restricted_zones." + teamId.toLowerCase() + "." + index;
             if (!context.getData().has(zonePath + ".min")) {
-                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_zone.not_found")
+                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "team_zone.not_found")
                         .replace("{team}", teamId)
                         .replace("{index}", String.valueOf(index)));
                 return true;
             }
             context.getData().remove(zonePath);
             context.getData().save();
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_zone.deleted")
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "team_zone.deleted")
                     .replace("{team}", teamId)
                     .replace("{index}", String.valueOf(index)));
             return true;
@@ -561,7 +561,7 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
         String teamArg = "create".equals(action) ? context.getHandlerArg(2) : context.getHandlerArg(1);
         String teamId = normalizeTeamId(teamArg);
         if (teamId == null) {
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_zone.create_usage"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "team_zone.create_usage"));
             sendTeamIdRangeMessage(context);
             return true;
         }
@@ -577,7 +577,7 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
         }
 
         if (!context.getSelection().hasCompleteSelection(player)) {
-            context.getMessagesAPI().sendRaw(player, getSetupMessage("team_zone.must_use_stick"));
+            context.getMessagesAPI().sendRaw(player, getSetupMessage(context.getPlayer(), "team_zone.must_use_stick"));
             return true;
         }
 
@@ -594,14 +594,14 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
         context.getData().setLocation(basePath + "." + index + ".max", pos2);
         context.getData().save();
 
-        context.getMessagesAPI().sendRaw(player, getSetupMessage("team_zone.set")
+        context.getMessagesAPI().sendRaw(player, getSetupMessage(context.getPlayer(), "team_zone.set")
                 .replace("{team}", teamId)
                 .replace("{index}", String.valueOf(index)));
         return true;
     }
 
     private boolean handleTeamZoneList(SetupContext<Player, CommandSender, Location> context) {
-        context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_zone.list_header"));
+        context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "team_zone.list_header"));
         int teamCount = context.getData().getInt("teams.count", 0);
         int listed = 0;
         for (int team = 1; team <= teamCount; team++) {
@@ -611,14 +611,14 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
                 if (!context.getData().has(basePath + "." + index + ".min")) {
                     continue;
                 }
-                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_zone.list_line")
+                context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "team_zone.list_line")
                         .replace("{team}", teamId)
                         .replace("{index}", String.valueOf(index)));
                 listed++;
             }
         }
         if (listed == 0) {
-            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("team_zone.list_empty"));
+            context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "team_zone.list_empty"));
         }
         return true;
     }
@@ -626,14 +626,14 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
     private boolean handleRegion(SetupContext<Player, CommandSender, Location> context) {
         if (!context.hasHandlerArgs(1)) {
             context.getMessagesAPI().sendRaw(context.getPlayer(),
-                    getSetupMessage("region.usage"));
+                    getSetupMessage(context.getPlayer(), "region.usage"));
             return true;
         }
 
         String action = context.getHandlerArg(0);
         if (action == null) {
             context.getMessagesAPI().sendRaw(context.getPlayer(),
-                    getSetupMessage("region.usage"));
+                    getSetupMessage(context.getPlayer(), "region.usage"));
             return true;
         }
 
@@ -642,13 +642,13 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
             context.getData().remove("regeneration.regions");
             context.getData().save();
             context.getMessagesAPI().sendRaw(context.getPlayer(),
-                    getSetupMessage("region.cleared"));
+                    getSetupMessage(context.getPlayer(), "region.cleared"));
             return true;
         }
 
         if (!"set".equalsIgnoreCase(action)) {
             context.getMessagesAPI().sendRaw(context.getPlayer(),
-                    getSetupMessage("region.usage"));
+                    getSetupMessage(context.getPlayer(), "region.usage"));
             return true;
         }
 
@@ -659,7 +659,7 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
 
         if (!context.getSelection().hasCompleteSelection(player)) {
             context.getMessagesAPI().sendRaw(player,
-                    getSetupMessage("region.must_use_stick"));
+                    getSetupMessage(context.getPlayer(), "region.must_use_stick"));
             return true;
         }
 
@@ -675,7 +675,7 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
         int blocks = x * y * z;
 
         context.getMessagesAPI().sendRaw(player,
-                getSetupMessage("region.set")
+                getSetupMessage(context.getPlayer(), "region.set")
                         .replace("{blocks}", String.valueOf(blocks))
                         .replace("{x}", String.valueOf(x))
                         .replace("{y}", String.valueOf(y))
@@ -683,8 +683,8 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
         return true;
     }
 
-    private String getSetupMessage(String key) {
-        String message = module.getModuleConfig().getStringFrom("language.yml", "setup_messages." + key);
+    private String getSetupMessage(Player player, String key) {
+        String message = module.getModuleConfig().getTranslation(player, "setup_messages." + key);
         if (message == null) {
             return "";
         }
@@ -704,7 +704,7 @@ public class CaptureTheWoolSetup implements GameSetupHandler {
         int teamCount = context.getData().getInt("teams.count", 0);
         String max = teamCount > 0 ? String.valueOf(teamCount) : "N";
         context.getMessagesAPI().sendRaw(context.getPlayer(),
-                getSetupMessage("team.numeric_ids_only")
+                getSetupMessage(context.getPlayer(), "team.numeric_ids_only")
                         .replace("{min}", "1")
                         .replace("{max}", max));
     }

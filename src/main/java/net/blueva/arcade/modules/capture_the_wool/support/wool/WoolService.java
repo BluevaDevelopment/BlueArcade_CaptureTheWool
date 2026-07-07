@@ -173,8 +173,8 @@ public class WoolService {
             return;
         }
 
-        String line1 = moduleConfig.getStringFrom("language.yml", "messages.wool.break_hint.title");
-        String line2 = moduleConfig.getStringFrom("language.yml", "messages.wool.break_hint.subtitle");
+        String line1 = moduleConfig.getTranslation(null, "messages.wool.break_hint.title");
+        String line2 = moduleConfig.getTranslation(null, "messages.wool.break_hint.subtitle");
         List<String> lines = new ArrayList<>();
         lines.add(line1 == null ? "<yellow><bold>BREAK THIS WOOL</bold></yellow>" : line1);
         lines.add(line2 == null ? "<gray>Break it to carry it.</gray>" : line2);
@@ -212,7 +212,7 @@ public class WoolService {
 
         removeCarrierHologram(state, def.getKey());
 
-        String carrierLine = moduleConfig.getStringFrom("language.yml", "messages.wool.carrier_hologram");
+        String carrierLine = moduleConfig.getTranslation(carrier, "messages.wool.carrier_hologram");
         if (carrierLine == null) {
             String colorTag = resolveWoolColor(def.getMaterial());
             carrierLine = colorTag + "⬛ CARRYING WOOL ⬛";
@@ -315,7 +315,7 @@ public class WoolService {
 
             spawnCarrierHologram(context, state, def, player);
 
-            String message = moduleConfig.getStringFrom("language.yml", "messages.wool.picked_up");
+            String message = moduleConfig.getTranslation(player, "messages.wool.picked_up");
             if (message != null) {
                 message = message.replace("{player}", player.getName())
                         .replace("{team}", resolveTeamReference(teamsAPI, def.getTeamId()))
@@ -366,7 +366,7 @@ public class WoolService {
             }
 
             if (def.getOwnerTeamId().equalsIgnoreCase(playerTeamId)) {
-                String ownTeamMessage = moduleConfig.getStringFrom("language.yml", "messages.wool.cannot_break_own");
+                String ownTeamMessage = moduleConfig.getTranslation(player, "messages.wool.cannot_break_own");
                 if (ownTeamMessage == null || ownTeamMessage.isBlank()) {
                     ownTeamMessage = "<red>This wool belongs to your team. You must defend it.</red>";
                 }
@@ -376,7 +376,7 @@ public class WoolService {
             }
 
             if (!canTeamStealWool(teamsAPI, def, playerTeamId)) {
-                String blockedMessage = moduleConfig.getStringFrom("language.yml", "messages.wool.cannot_break");
+                String blockedMessage = moduleConfig.getTranslation(player, "messages.wool.cannot_break");
                 if (blockedMessage == null || blockedMessage.isBlank()) {
                     blockedMessage = "<red>You cannot break this wool.</red>";
                 }
@@ -515,7 +515,7 @@ public class WoolService {
 
             removeCarrierHologram(state, def.getKey());
 
-            String message = moduleConfig.getStringFrom("language.yml", "messages.wool.captured");
+            String message = moduleConfig.getTranslation(player, "messages.wool.captured");
             if (message != null) {
                 message = message.replace("{player}", player.getName())
                         .replace("{team}", resolveTeamReference(teamsAPI, def.getTeamId()))
@@ -562,7 +562,7 @@ public class WoolService {
         removeWoolItems(player, state);
 
         if (lostWool && context != null) {
-            String message = moduleConfig.getStringFrom("language.yml", "messages.wool.dropped");
+            String message = moduleConfig.getTranslation(player, "messages.wool.dropped");
             if (message != null) {
                 message = message.replace("{player}", player.getName());
                 for (Player online : context.getPlayers()) {
