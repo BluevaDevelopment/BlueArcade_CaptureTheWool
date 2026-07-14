@@ -223,7 +223,7 @@ public class CaptureTheWoolGame {
                         return;
                     }
                     teleportToTeamSpawn(context, state, player);
-                    context.setPlayerSpectating(player, true);
+                    player.setGameMode(GameMode.SPECTATOR);
                 });
             }
 
