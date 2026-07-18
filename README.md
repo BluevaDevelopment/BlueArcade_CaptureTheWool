@@ -1,7 +1,7 @@
 # BlueArcade - Capture The Wool
 
 This resource is a **BlueArcade 3 module** and requires the core plugin to run.
-Get BlueArcade 3 here: https://store.blueva.net/resources/resource/1-blue-arcade/
+Get BlueArcade 3 here: https://blueva.net/store/blue-arcade
 
 ## Description
 Capture enemy wools from their base and bring them back to yours. First team to capture all wools wins.
