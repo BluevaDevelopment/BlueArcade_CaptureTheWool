@@ -41,6 +41,8 @@ game:
   time_limit_seconds: 0
   # Seconds a player must wait before respawning
   respawn_delay_seconds: 3
+  # Players can only carry one wool at a time
+  one_wool_at_a_time: true
 
 spawn_protection:
   # Seconds of fall-damage immunity after spawning

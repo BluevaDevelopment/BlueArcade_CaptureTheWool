@@ -113,6 +113,7 @@ messages:
     dropped: "<red>{player}</red> <gray>soltó una lana. Ha vuelto a su punto de aparición.</gray>"
     cannot_break_own: "<red>Esta lana pertenece a tu equipo. ¡Defiéndela!</red>"
     cannot_break: "<red>No puedes coger esta lana.</red>"
+    already_carrying: "<red>Solo puedes llevar una lana a la vez.</red>"
     carrier_hologram: "<gold>⬛ LLEVANDO LANA ⬛</gold>"
     break_hint:
       title: "<yellow><bold>¡ROMPE ESTA LANA!</bold></yellow>"

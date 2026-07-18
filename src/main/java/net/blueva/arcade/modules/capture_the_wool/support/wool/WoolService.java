@@ -304,6 +304,10 @@ public class WoolService {
                 return false;
             }
 
+            if (isOneWoolAtATimeEnabled() && isPlayerCarryingWool(state, player)) {
+                return false;
+            }
+
             block.setType(Material.AIR);
 
             clearSpawnWoolVisuals(state, def.getKey());
@@ -385,12 +389,24 @@ public class WoolService {
                         .replace("{wool}", def.getWoolId());
             }
 
+            if (isOneWoolAtATimeEnabled() && isPlayerCarryingWool(state, player)) {
+                String carryingMessage = moduleConfig.getTranslation(player, "messages.wool.already_carrying");
+                if (carryingMessage == null || carryingMessage.isBlank()) {
+                    carryingMessage = "<red>You can only carry one wool at a time.</red>";
+                }
+                return carryingMessage;
+            }
+
             return null;
         }
 
         return null;
     }
 
+
+    private boolean isOneWoolAtATimeEnabled() {
+        return moduleConfig.getBoolean("game.one_wool_at_a_time", true);
+    }
 
     private boolean canTeamStealWool(TeamsAPI<Player, Material> teamsAPI, WoolDefinition def, String playerTeamId) {
         if (def == null || playerTeamId == null || playerTeamId.isBlank()) {

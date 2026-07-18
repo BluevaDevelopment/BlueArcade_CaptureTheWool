@@ -110,6 +110,7 @@ messages:
     dropped: "<red>{player}</red> <gray>dropped a wool! It has returned to its spawn.</gray>"
     cannot_break_own: "<red>This wool belongs to your team. Defend it!</red>"
     cannot_break: "<red>You cannot take this wool.</red>"
+    already_carrying: "<red>You can only carry one wool at a time.</red>"
     carrier_hologram: "<gold>⬛ CARRYING WOOL ⬛</gold>"
     break_hint:
       title: "<yellow><bold>BREAK THIS WOOL!</bold></yellow>"
