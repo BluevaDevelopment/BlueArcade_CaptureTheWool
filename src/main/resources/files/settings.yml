@@ -27,6 +27,8 @@ votes:
     hearts: "10"
     time: "day"
     weather: "sunny"
+  # Seconds a player must wait between votes (0 to disable)
+  cooldown_seconds: 5
 
 teams:
   # Minimum amount of teams required to start the match
