@@ -36,6 +36,12 @@ teams:
   # Minimum players per team required to start
   min_size: 2
 
+join_in_progress:
+  # Whether players may join a match that is already running. They are assigned
+  # a team, teleported to a spawn, and given a loadout immediately.
+  # Set to false to only allow joining while the arena is waiting.
+  enabled: true
+
 game:
   # Set to 0 to disable a time limit
   time_limit_seconds: 0

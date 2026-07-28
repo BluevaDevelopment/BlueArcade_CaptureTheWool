@@ -111,7 +111,13 @@ public class CaptureTheWoolModule implements GameModule<Player, Location, World,
 
     @Override
     public boolean allowJoinInProgress() {
-        return true;
+        return moduleConfig == null || moduleConfig.getBoolean("join_in_progress.enabled", true);
+    }
+
+    @Override
+    public boolean onPlayerJoinInProgress(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context,
+                                          Player player) {
+        return game.addLateJoiningPlayer(context, player);
     }
 
     @Override

@@ -289,6 +289,42 @@ public class CaptureTheWoolGame {
         }
     }
 
+    /**
+     * Places a player who joined after the match already started: assigns them a
+     * team (if not already assigned), teleports them to their team spawn, and gives
+     * them the same starting loadout players receive at match begin.
+     *
+     * @return true if the player was placed successfully, false if no team slot was
+     *         available (e.g. every team is already full)
+     */
+    public boolean addLateJoiningPlayer(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context,
+                                        Player player) {
+        ArenaState state = getArenaState(context);
+        if (state == null) {
+            return false;
+        }
+
+        TeamsAPI<Player, Material> teamsAPI = context.getTeamsAPI();
+        if (teamsAPI != null && teamsAPI.isEnabled() && teamsAPI.getTeam(player) == null) {
+            if (!teamsAPI.autoAssignPlayer(player)) {
+                return false;
+            }
+        }
+
+        playerArena.put(player, context.getArenaId());
+        state.initializePlayer(player.getUniqueId());
+
+        teleportToTeamSpawn(context, state, player);
+        player.setGameMode(GameMode.SURVIVAL);
+        loadoutService.restoreVitals(player);
+        loadoutService.giveStartingItems(context, player);
+        loadoutService.applyStartingEffects(player);
+        registerFallProtection(state, player);
+        context.getScoreboardAPI().showScoreboard(player, getScoreboardPath(context));
+
+        return true;
+    }
+
     public void finishGame(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context) {
         int arenaId = context.getArenaId();
         context.getSchedulerAPI().cancelArenaTasks(arenaId);
