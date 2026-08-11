@@ -488,16 +488,67 @@ public class CaptureTheWoolGame {
         context.getSoundsAPI().play(killer, coreConfig.getSound("sounds.in_game.respawn"));
     }
 
+    public void recordHit(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context,
+                          Player victim,
+                          Player attacker) {
+        ArenaState state = getArenaState(context);
+        if (state == null || victim == null || attacker == null) {
+            return;
+        }
+        state.recordHit(victim.getUniqueId(), attacker.getUniqueId());
+    }
+
     public void handleKill(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context,
                            Player attacker,
                            Player victim) {
+        clearCombatTag(context, victim);
         combatService.handleKillCredit(context, attacker);
         combatService.handleElimination(context, victim, attacker);
     }
 
+    /**
+     * Falling, void and other environmental deaths still count as a kill when someone hit the
+     * victim shortly before: knocking an enemy off a bridge is a normal way to win a fight.
+     */
     public void handleNonCombatDeath(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context,
                                      Player victim) {
+        Player killer = resolveRecentAttacker(context, victim);
+        if (killer != null) {
+            handleKill(context, killer, victim);
+            return;
+        }
+
+        clearCombatTag(context, victim);
         combatService.handleElimination(context, victim, null);
+    }
+
+    private Player resolveRecentAttacker(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context,
+                                         Player victim) {
+        ArenaState state = getArenaState(context);
+        if (state == null || victim == null) {
+            return null;
+        }
+
+        long windowMillis = Math.max(0, moduleConfig.getInt("kills.credit_window_ticks", 200)) * 50L;
+        UUID attackerId = state.getRecentAttacker(victim.getUniqueId(), windowMillis);
+        if (attackerId == null) {
+            return null;
+        }
+
+        for (Player player : context.getPlayers()) {
+            if (player.getUniqueId().equals(attackerId) && context.isPlayerPlaying(player)) {
+                return player;
+            }
+        }
+        return null;
+    }
+
+    private void clearCombatTag(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context,
+                               Player victim) {
+        ArenaState state = getArenaState(context);
+        if (state != null && victim != null) {
+            state.clearCombatTag(victim.getUniqueId());
+        }
     }
 
     public void handleWoolDrop(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context,

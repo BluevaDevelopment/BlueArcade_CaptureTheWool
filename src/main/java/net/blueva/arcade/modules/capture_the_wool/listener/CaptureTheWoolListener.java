@@ -245,6 +245,8 @@ public class CaptureTheWoolListener implements Listener {
             }
         }
 
+        game.recordHit(context, target, attacker);
+
         double finalHealth = target.getHealth() - event.getFinalDamage();
         if (finalHealth > 0) {
             return;
